@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import React from "react";
-import { Container } from "./";
+import { Container, SearchInput } from "./";
 import Image from "next/image";
 import { Button } from "../ui";
 import { ArrowRight, ShoppingCart, User } from "lucide-react";
@@ -24,6 +24,10 @@ export const Header: React.FC<Props> = ({ className }) => {
             </p>
           </div>
         </Link>
+
+        <div className="mx-10 flex-1">
+          <SearchInput />
+        </div>
 
         {/* Правая часть */}
         <div className="flex items-center gap-3">

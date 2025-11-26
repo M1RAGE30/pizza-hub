@@ -2,7 +2,8 @@
 
 import React from "react";
 import { FilterChecboxProps, FilterCheckbox } from "./filter-checkbox";
-import { Input, Skeleton } from "../ui";
+import { Input } from "../ui/input";
+import { Skeleton } from "../ui";
 
 type Item = FilterChecboxProps;
 
@@ -17,6 +18,7 @@ interface Props {
   defaultValue?: string[];
   selected?: Set<string>;
   className?: string;
+  name?: string;
 }
 
 export const CheckboxFiltersGroup: React.FC<Props> = ({
@@ -29,6 +31,7 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
   loading,
   onClickCheckbox,
   selected,
+  name,
 }) => {
   const [showAll, setShowAll] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState("");
@@ -82,6 +85,7 @@ export const CheckboxFiltersGroup: React.FC<Props> = ({
             endAdornment={item.endAdornment}
             checked={selected?.has(item.value)}
             onCheckedChange={() => onClickCheckbox?.(item.value)}
+            name={name}
           />
         ))}
       </div>
