@@ -24,15 +24,16 @@ export const ProductsGroupList: React.FC<Props> = ({
 }) => {
   const setActiveCategoryId = useCategoryStore((state) => state.setActiveId);
   const intersectionRef = React.useRef(null);
+
   const intersection = useIntersection(intersectionRef, {
-    threshold: 0.4,
+    threshold: 0.8,
   });
 
   React.useEffect(() => {
     if (intersection?.isIntersecting) {
       setActiveCategoryId(categoryId);
     }
-  }, [categoryId, intersection?.isIntersecting, setActiveCategoryId, title]);
+  }, [categoryId, intersection?.isIntersecting, setActiveCategoryId]);
 
   return (
     <div className={className} id={title} ref={intersectionRef}>

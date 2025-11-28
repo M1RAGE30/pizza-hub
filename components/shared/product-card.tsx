@@ -33,18 +33,18 @@ export const ProductCard: React.FC<Props> = ({
           Цыпленок, моцарелла, сыры чеддер и пармезан, срный соус, томаты, соус
           альфредо, чеснок
         </p>
-
-        <div className="flex justify-between items-center mt-4">
-          <span className="text-[20px]">
-            от <b>{price} ₽</b>
-          </span>
-
-          <Button variant="secondary" className="text-base font-bold">
-            <Plus size={20} className="mr-1" />
-            Добавить
-          </Button>
-        </div>
       </Link>
+
+      <div className="flex justify-between items-center mt-4">
+        <span className="text-[20px]">
+          от <b>{price} ₽</b>
+        </span>
+
+        <Button variant="secondary" className="text-base font-bold">
+          <Plus size={20} className="mr-1" />
+          Добавить
+        </Button>
+      </div>
     </div>
   );
 };

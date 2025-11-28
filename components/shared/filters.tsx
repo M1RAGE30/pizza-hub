@@ -21,7 +21,6 @@ export const Filters: React.FC<Props> = ({ className }) => {
   }));
 
   const updatePrices = (prices: number[]) => {
-    console.log(prices, 999);
     filters.setPrices("priceFrom", prices[0]);
     filters.setPrices("priceTo", prices[1]);
   };
@@ -65,7 +64,7 @@ export const Filters: React.FC<Props> = ({ className }) => {
             placeholder="0"
             min={0}
             max={2000}
-            value={String(filters.prices.priceFrom)}
+            value={String(filters.prices.priceFrom ?? 0)}
             onChange={(e) =>
               filters.setPrices("priceFrom", Number(e.target.value))
             }
@@ -75,7 +74,7 @@ export const Filters: React.FC<Props> = ({ className }) => {
             min={100}
             max={2000}
             placeholder="2000"
-            value={String(filters.prices.priceTo)}
+            value={String(filters.prices.priceTo ?? 2000)}
             onChange={(e) =>
               filters.setPrices("priceTo", Number(e.target.value))
             }
