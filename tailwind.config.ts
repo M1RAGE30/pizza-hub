@@ -7,7 +7,6 @@ const config = {
     "./shared/components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
   ],
   prefix: "",
   theme: {
@@ -75,7 +74,6 @@ const config = {
       },
     },
   },
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
 

@@ -50,25 +50,25 @@ html {
 
 .scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: #b7b7b7 transparent;
+  scrollbar-color: #dbdadd #fff;
 }
 
 .scrollbar::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 
 .scrollbar::-webkit-scrollbar-track {
-  border-radius: 10px;
-  background: transparent;
+  border-radius: 6px;
+  background: #fff;
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
-  background: #b7b7b7;
-  border-radius: 10px;
+  background: #dbdadd;
+  border-radius: 6px;
 }
 
 .scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #8c8c8c;
+  background: #dbdadd;
 }
 
 @layer utilities {
@@ -81,7 +81,6 @@ html {
   * {
     @apply border-border;
   }
-
   body {
     @apply bg-background text-foreground;
   }
