@@ -1,16 +1,13 @@
+"use client";
+
 import React from "react";
 import { cn } from "@/shared/lib/utils";
 import { GroupVariants, IngredientItem, PizzaImage, Title } from ".";
 import { Button } from "../ui";
-import {
-  mapPizzaType,
-  PizzaSize,
-  pizzaSizes,
-  PizzaType,
-  pizzaTypes,
-} from "@/shared/constants/pizza";
+import { PizzaSize, PizzaType, pizzaTypes } from "@/shared/constants/pizza";
 import { Ingredient, ProductItem } from "@prisma/client";
-import { useSet } from "react-use";
+import { usePizzaOptions } from "@/shared/hooks";
+import { getPizzaDetails } from "@/shared/lib";
 
 interface Props {
   imageUrl: string;
@@ -29,26 +26,23 @@ export const ChoosePizzaForm: React.FC<Props> = ({
   onClickAddCart,
   className,
 }) => {
-  const [size, setSize] = React.useState<PizzaSize>(20);
-  const [type, setType] = React.useState<PizzaType>(1);
+  const {
+    size,
+    type,
+    selectedIngredients,
+    availableSizes,
+    setSize,
+    setType,
+    addIngredient,
+  } = usePizzaOptions(items);
 
-  const [selectedIngredients, { toggle: addIngredient }] = useSet(
-    new Set<number>([])
+  const { totalPrice, textDetaills } = getPizzaDetails(
+    type,
+    size,
+    items,
+    ingredients,
+    selectedIngredients
   );
-
-  const pizzaPrice =
-    items.find((item) => item.pizzaType === type && item.size === size)
-      ?.price || 0;
-
-  const totalIngredientsPrice = ingredients
-    .filter((ingredient) => selectedIngredients.has(ingredient.id))
-    .reduce((acc, ingredient) => acc + ingredient.price, 0);
-
-  const totalPrice = pizzaPrice + totalIngredientsPrice;
-
-  const textDetaills = `${size} см, ${String(
-    mapPizzaType[type]
-  ).toLowerCase()} тесто`;
 
   const handleClickAdd = () => {
     onClickAddCart?.();
@@ -68,9 +62,9 @@ export const ChoosePizzaForm: React.FC<Props> = ({
 
         <p className="text-gray-400">{textDetaills}</p>
 
-        <div className="flex flex-col gap-3 mt-5">
+        <div className="flex flex-col gap-4 mt-5">
           <GroupVariants
-            items={pizzaSizes}
+            items={availableSizes}
             value={String(size)}
             onClick={(value) => setSize(Number(value) as PizzaSize)}
           />
@@ -97,7 +91,10 @@ export const ChoosePizzaForm: React.FC<Props> = ({
           </div>
         </div>
 
-        <Button className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10">
+        <Button
+          onClick={handleClickAdd}
+          className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10"
+        >
           Добавить в корзину за {totalPrice} ₽
         </Button>
       </div>
