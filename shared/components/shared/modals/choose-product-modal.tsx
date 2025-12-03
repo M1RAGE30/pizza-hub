@@ -1,12 +1,16 @@
 "use client";
 
 import React from "react";
-import { Dialog, DialogContent } from "@/shared/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+} from "@/shared/components/ui/dialog";
 import { cn } from "@/shared/lib/utils";
 import { useRouter } from "next/navigation";
 import { ChooseProductForm, ChoosePizzaForm } from "../";
 import { ProductWithRelations } from "@/@types/prisma";
-import { DialogTitle } from "@radix-ui/react-dialog";
 
 interface Props {
   product: ProductWithRelations;
@@ -25,7 +29,10 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className }) => {
           className
         )}
       >
-        <DialogTitle className="sr-only">123</DialogTitle>
+        <DialogTitle className="sr-only">Опции для {product.name}</DialogTitle>
+        <DialogDescription className="sr-only">
+          Настройка пиццы перед добавлением в корзину.
+        </DialogDescription>
 
         {isPizzaForm ? (
           <ChoosePizzaForm
