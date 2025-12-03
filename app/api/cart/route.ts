@@ -1,5 +1,5 @@
 import { prisma } from "@/prisma/prisma-client";
-import { updateCartTotalAmount } from "@/shared/lib";
+import { findOrCreateCart, updateCartTotalAmount } from "@/shared/lib";
 import { CreateCartItemValues } from "@/shared/services/dto/cart.dto";
 import { NextRequest, NextResponse } from "next/server";
 
