@@ -1,5 +1,6 @@
 import { Nunito } from "next/font/google";
 import { Toaster } from "react-hot-toast";
+import type { Metadata } from "next";
 
 import "./globals.css";
 
@@ -9,6 +10,12 @@ const nunito = Nunito({
   weight: ["400", "500", "600", "700", "800", "900"],
 });
 
+export const metadata: Metadata = {
+  icons: {
+    icon: "/logo.png",
+  },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -16,9 +23,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <link data-rh="true" rel="icon" href="/logo.png" />
-      </head>
       <body className={nunito.className} suppressHydrationWarning>
         {children}
         <Toaster />

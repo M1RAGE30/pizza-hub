@@ -25,7 +25,6 @@ import { useCart } from "@/shared/hooks";
 
 export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { totalAmount, updateItemQuantity, items, removeCartItem } = useCart();
-  const [redirecting, setRedirecting] = React.useState(false);
 
   const onClickCountButton = (
     id: number,

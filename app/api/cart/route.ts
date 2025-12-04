@@ -1,7 +1,9 @@
 import { prisma } from "@/prisma/prisma-client";
-import { findOrCreateCart, updateCartTotalAmount } from "@/shared/lib";
-import { CreateCartItemValues } from "@/shared/services/dto/cart.dto";
 import { NextRequest, NextResponse } from "next/server";
+import crypto from "crypto";
+import { findOrCreateCart } from "@/shared/lib/find-or-create-cart";
+import { CreateCartItemValues } from "@/shared/services/dto/cart.dto";
+import { updateCartTotalAmount } from "@/shared/lib/update-cart-total-amount";
 
 export async function GET(req: NextRequest) {
   try {
@@ -58,16 +60,35 @@ export async function POST(req: NextRequest) {
 
     const data = (await req.json()) as CreateCartItemValues;
 
-    const findCartItem = await prisma.cartItem.findFirst({
+    // Получаем все товары в корзине с тем же productItemId
+    const cartItems = await prisma.cartItem.findMany({
       where: {
         cartId: userCart.id,
         productItemId: data.productItemId,
-        ingredients: {
-          every: {
-            id: { in: data.ingredients },
-          },
-        },
       },
+      include: {
+        ingredients: true,
+      },
+    });
+
+    // Сортируем ID ингредиентов для сравнения
+    const requestedIngredientIds = (data.ingredients || []).sort(
+      (a, b) => a - b
+    );
+
+    // Ищем точное совпадение набора ингредиентов
+    const findCartItem = cartItems.find((item) => {
+      const itemIngredientIds = item.ingredients
+        .map((ingredient) => ingredient.id)
+        .sort((a, b) => a - b);
+
+      // Проверяем точное совпадение: одинаковое количество и одинаковые ID
+      return (
+        itemIngredientIds.length === requestedIngredientIds.length &&
+        itemIngredientIds.every(
+          (id, index) => id === requestedIngredientIds[index]
+        )
+      );
     });
 
     if (findCartItem) {
