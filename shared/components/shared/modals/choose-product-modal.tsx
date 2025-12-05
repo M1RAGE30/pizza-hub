@@ -5,7 +5,7 @@ import {
   DialogContent,
   DialogTitle,
   DialogDescription,
-} from "@/shared/components/ui/dialog";
+} from "@/shared/components/ui";
 import { cn } from "@/shared/lib/utils";
 import React from "react";
 import { useRouter } from "next/navigation";

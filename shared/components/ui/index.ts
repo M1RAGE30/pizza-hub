@@ -1,11 +1,33 @@
 export { Button } from "./button";
 export { Checkbox } from "./checkbox";
-export { Dialog } from "./dialog";
+export {
+  Dialog,
+  DialogPortal,
+  DialogOverlay,
+  DialogClose,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+} from "./dialog";
 export { Drawer } from "./drawer";
 export { Input } from "./input";
 export { Popover } from "./popover";
 export { Select } from "./select";
 export { Skeleton } from "./skeleton";
 export { Slider } from "./slider";
-export { Sheet } from "./sheet";
+export {
+  Sheet,
+  SheetPortal,
+  SheetOverlay,
+  SheetTrigger,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetFooter,
+  SheetTitle,
+  SheetDescription,
+} from "./sheet";
 export { Textarea } from "./textarea";

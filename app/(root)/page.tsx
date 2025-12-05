@@ -4,7 +4,7 @@ import {
   ProductsGroupList,
   Title,
   TopBar,
-} from "@/shared/components/shared";
+} from "@/shared/components";
 import { Suspense } from "react";
 import { GetSearchParams, findPizzas } from "@/shared/lib/find-pizzas";
 

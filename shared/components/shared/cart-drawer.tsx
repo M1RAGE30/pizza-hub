@@ -12,9 +12,9 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/shared/components/ui/sheet";
+} from "@/shared/components/ui";
 import Link from "next/link";
-import { Button } from "../ui";
+import { Button } from "@/shared/components/ui";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { CartDrawerItem } from "./cart-drawer-item";
 import { getCartItemDetails } from "@/shared/lib";
@@ -25,6 +25,7 @@ import { useCart } from "@/shared/hooks";
 
 export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { totalAmount, updateItemQuantity, items, removeCartItem } = useCart();
+  const [redirecting, setRedirecting] = React.useState(false);
 
   const onClickCountButton = (
     id: number,
@@ -40,25 +41,26 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
       <SheetTrigger asChild>{children}</SheetTrigger>
 
       <SheetContent className="flex flex-col justify-between pb-0 bg-[#F4F1EE]">
-        <SheetHeader className={cn(!totalAmount && "sr-only")}>
-          <SheetTitle>
-            {totalAmount > 0
-              ? `В корзине ${items.length} товара`
-              : "Корзина пустая"}
-          </SheetTitle>
-          <SheetDescription className="sr-only">
-            {totalAmount > 0
-              ? "Просмотр и управление товарами в корзине"
-              : "Добавьте товары в корзину для оформления заказа"}
-          </SheetDescription>
-        </SheetHeader>
-
         <div
           className={cn(
             "flex flex-col h-full",
             !totalAmount && "justify-center"
           )}
         >
+          {totalAmount > 0 && (
+            <SheetHeader>
+              <SheetTitle>
+                В корзине{" "}
+                <span className="font-bold">{items.length} товара</span>
+              </SheetTitle>
+              <SheetDescription className="sr-only">
+                {totalAmount > 0
+                  ? "Просмотр и управление товарами в корзине"
+                  : "Добавьте товары в корзину для оформления заказа"}
+              </SheetDescription>
+            </SheetHeader>
+          )}
+
           {!totalAmount && (
             <div className="flex flex-col items-center justify-center w-72 mx-auto">
               <Image
@@ -76,7 +78,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
                 Добавьте хотя бы одну пиццу, чтобы совершить заказ
               </p>
 
-              <SheetClose asChild>
+              <SheetClose>
                 <Button className="w-56 h-12 text-base" size="lg">
                   <ArrowLeft className="w-5 mr-2" />
                   Вернуться назад
@@ -123,7 +125,12 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
                   </div>
 
                   <Link href="/checkout">
-                    <Button type="submit" className="w-full h-12 text-base">
+                    <Button
+                      onClick={() => setRedirecting(true)}
+                      loading={redirecting}
+                      type="submit"
+                      className="w-full h-12 text-base"
+                    >
                       Оформить заказ
                       <ArrowRight className="w-5 ml-2" />
                     </Button>
