@@ -1,7 +1,13 @@
 "use client";
 
 import React from "react";
-import { WhiteBlock, FormTextarea, AddressInput, ErrorText } from "../../";
+import {
+  WhiteBlock,
+  FormTextarea,
+  AddressInput,
+  ErrorText,
+  ClearButton,
+} from "../../";
 import { Controller, useFormContext } from "react-hook-form";
 
 interface Props {
@@ -9,7 +15,7 @@ interface Props {
 }
 
 export const CheckoutAddressForm: React.FC<Props> = ({ className }) => {
-  const { control } = useFormContext();
+  const { control, watch, setValue } = useFormContext();
 
   return (
     <WhiteBlock title="3. Адрес доставки" className={className}>
@@ -17,14 +23,23 @@ export const CheckoutAddressForm: React.FC<Props> = ({ className }) => {
         <Controller
           control={control}
           name="address"
-          render={({ field, fieldState }) => (
-            <>
-              <AddressInput onChange={field.onChange} />
-              {fieldState.error?.message && (
-                <ErrorText text={fieldState.error.message} />
-              )}
-            </>
-          )}
+          render={({ field, fieldState }) => {
+            const onClickClear = () => {
+              field.onChange("");
+            };
+
+            return (
+              <div>
+                <div className="relative">
+                  <AddressInput value={field.value} onChange={field.onChange} />
+                  {field.value && <ClearButton onClick={onClickClear} />}
+                </div>
+                {fieldState.error?.message && (
+                  <ErrorText text={fieldState.error.message} className="mt-2" />
+                )}
+              </div>
+            );
+          }}
         />
 
         <FormTextarea

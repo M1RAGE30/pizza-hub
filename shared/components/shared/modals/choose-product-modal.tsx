@@ -28,11 +28,15 @@ export const ChooseProductModal: React.FC<Props> = ({ product, className }) => {
           className
         )}
       >
-        <DialogTitle className="sr-only">Опции для {product.name}</DialogTitle>
+        <DialogTitle className="sr-only">
+          {product ? `Опции для ${product.name}` : "Настройка товара"}
+        </DialogTitle>
         <DialogDescription className="sr-only">
           Настройка товара перед добавлением в корзину.
         </DialogDescription>
-        <ProductForm product={product} onSubmit={() => router.back()} />
+        {product && (
+          <ProductForm product={product} onSubmit={() => router.back()} />
+        )}
       </DialogContent>
     </Dialog>
   );

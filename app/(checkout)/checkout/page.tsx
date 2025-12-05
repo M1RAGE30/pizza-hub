@@ -13,8 +13,12 @@ import {
 } from "@/shared/components";
 import { checkoutFormSchema, CheckoutFormValues } from "@/shared/constants";
 import { useCart } from "@/shared/hooks";
+import { createOrder } from "@/app/actions";
+import toast from "react-hot-toast";
+import React from "react";
 
 export default function CheckoutPage() {
+  const [submitting, setSubmitting] = React.useState(false);
   const { totalAmount, updateItemQuantity, items, removeCartItem, loading } =
     useCart();
 
@@ -31,7 +35,34 @@ export default function CheckoutPage() {
   });
 
   const onSubmit = async (data: CheckoutFormValues) => {
-    console.log(data);
+    try {
+      setSubmitting(true);
+
+      const url = await createOrder(data);
+
+      toast.error("Заказ успешно оформлен! 📝 Переход на оплату... ", {
+        icon: "✅",
+      });
+
+      if (typeof url === "string" && url && (url as string).length > 0) {
+        location.href = url as string;
+      }
+    } catch (err) {
+      console.log(err);
+      setSubmitting(false);
+      toast.error("Не удалось создать заказ", {
+        icon: "❌",
+      });
+    }
+  };
+
+  const onClickCountButton = (
+    id: number,
+    quantity: number,
+    type: "plus" | "minus"
+  ) => {
+    const newQuantity = type === "plus" ? quantity + 1 : quantity - 1;
+    updateItemQuantity(id, newQuantity);
   };
 
   return (
@@ -47,7 +78,7 @@ export default function CheckoutPage() {
             {/* Левая часть */}
             <div className="flex flex-col gap-10 flex-1 mb-20">
               <CheckoutCart
-                onClickCountButton={() => {}}
+                onClickCountButton={onClickCountButton}
                 removeCartItem={removeCartItem}
                 items={items}
                 loading={loading}
@@ -64,7 +95,10 @@ export default function CheckoutPage() {
 
             {/* Правая часть */}
             <div className="w-[450px]">
-              <CheckoutSidebar totalAmount={totalAmount} loading={loading} />
+              <CheckoutSidebar
+                totalAmount={totalAmount}
+                loading={loading || submitting}
+              />
             </div>
           </div>
         </form>
