@@ -3,7 +3,7 @@
 import { prisma } from "@/prisma/prisma-client";
 import { PayOrderTemplate } from "@/shared/components";
 import { CheckoutFormValues } from "@/shared/constants";
-import { sendEmail } from "@/shared/lib";
+import { createPayment, sendEmail } from "@/shared/lib";
 import { OrderStatus } from "@prisma/client";
 import { cookies } from "next/headers";
 import React from "react";
@@ -78,15 +78,38 @@ export async function createOrder(data: CheckoutFormValues) {
       },
     });
 
+    const paymentData = await createPayment({
+      amount: order.totalAmount,
+      orderId: order.id,
+      description: "Оплата заказа #" + order.id,
+    });
+
+    if (!paymentData) {
+      throw new Error("Payment data not found");
+    }
+
+    await prisma.order.update({
+      where: {
+        id: order.id,
+      },
+      data: {
+        paymentId: paymentData.id,
+      },
+    });
+
+    const paymentUrl = paymentData.confirmation.confirmation_url;
+
     await sendEmail(
       data.email,
       "Next Pizza / Оплатите заказ #" + order.id,
-      React.createElement(PayOrderTemplate, {
+      PayOrderTemplate({
         orderId: order.id,
         totalAmount: order.totalAmount,
-        paymentUrl: "https://nextjs.org/",
-      })
+        paymentUrl,
+      }) as React.ReactElement
     );
+
+    return paymentUrl;
   } catch (err) {
     console.log("[CreateOrder] Server error", err);
   }
