@@ -1,17 +1,26 @@
-import React from 'react';
+import React from "react";
 
 interface Props {
   code: string;
 }
 
-export const VerificationUserTemplate: React.FC<Props> = ({ code }) => (
-  <div>
-    <p>
-      Код подтверждения: <h2>{code}</h2>
-    </p>
+export const VerificationUserTemplate: React.FC<Props> = ({ code }) => {
+  const baseUrl = "http://localhost:3000";
+  const verifyUrl = `${baseUrl}/api/auth/verify?code=${code}`;
 
-    <p>
-      <a href={`http://localhost:3000/api/auth/verify?code=${code}`}>Подтвердить регистрацию</a>
-    </p>
-  </div>
-);
+  return (
+    <div>
+      <h1>Подтверждение регистрации</h1>
+
+      <p>
+        Спасибо за регистрацию! Для завершения регистрации введите код
+        подтверждения: <b>{code}</b>
+      </p>
+
+      <p>
+        Или перейдите <a href={verifyUrl}>по этой ссылке</a> для автоматического
+        подтверждения.
+      </p>
+    </div>
+  );
+};

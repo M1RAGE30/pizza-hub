@@ -6,7 +6,7 @@ import { sendEmail } from "@/shared/lib";
 import { CartItemDTO } from "@/shared/services/dto/cart.dto";
 import { OrderStatus } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import React from "react";
+import { errorResponse } from "@/shared/lib/api-helpers";
 
 export async function POST(req: NextRequest) {
   try {
@@ -19,7 +19,14 @@ export async function POST(req: NextRequest) {
     });
 
     if (!order) {
-      return NextResponse.json({ error: "Order not found" });
+      return NextResponse.json({ error: "Order not found" }, { status: 404 });
+    }
+
+    if (order.status !== OrderStatus.PENDING) {
+      return NextResponse.json({
+        success: true,
+        message: "Order already processed",
+      });
     }
 
     const isSucceeded = body.object.status === "succeeded";
@@ -33,23 +40,28 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    const items = JSON.parse(order?.items as string) as CartItemDTO[];
+    try {
+      const items = JSON.parse(order?.items as string) as CartItemDTO[];
 
-    if (isSucceeded) {
-      await sendEmail(
-        order.email,
-        "Next Pizza / Ваш заказ успешно оформлен 🎉",
-        OrderSuccessTemplate({ orderId: order.id, items }) as React.ReactElement
-      );
-    } else {
-      await sendEmail(
-        order.email,
-        "Next Pizza / Оплата не прошла",
-        OrderFailedTemplate({ orderId: order.id }) as React.ReactElement
-      );
+      if (isSucceeded) {
+        await sendEmail(
+          order.email,
+          "Next Pizza / Ваш заказ успешно оформлен 🎉",
+          OrderSuccessTemplate({ orderId: order.id, items }) as any
+        );
+      } else {
+        await sendEmail(
+          order.email,
+          "Next Pizza / Оплата не прошла",
+          OrderFailedTemplate({ orderId: order.id }) as any
+        );
+      }
+    } catch (emailError) {
+      console.log("[Checkout Callback] Email error:", emailError);
     }
+
+    return NextResponse.json({ success: true });
   } catch (error) {
-    console.log("[Checkout Callback] Error:", error);
-    return NextResponse.json({ error: "Server error" });
+    return errorResponse("Server error", 500, error);
   }
 }

@@ -1,9 +1,10 @@
 import {
   Container,
   Filters,
-  ProductsGroupList,
   Title,
   TopBar,
+  ProductsGroupList,
+  Stories,
 } from "@/shared/components";
 import { Suspense } from "react";
 import { GetSearchParams, findPizzas } from "@/shared/lib/find-pizzas";
@@ -28,17 +29,17 @@ export default async function Home({
         )}
       />
 
-      <Container className="mt-10 pb-14">
-        <div className="flex gap-[80px]">
-          {/* Фильтрация */}
-          <div className="w-[250px]">
+      <Stories />
+
+          <Container className="mt-10 pb-14">
+            <div className="flex gap-[80px]">
+              <div className="w-[250px]">
             <Suspense>
               <Filters />
-            </Suspense>
-          </div>
+                </Suspense>
+              </div>
 
-          {/* Список товаров */}
-          <div className="flex-1">
+              <div className="flex-1">
             <div className="flex flex-col gap-16">
               {categories.map(
                 (category) =>

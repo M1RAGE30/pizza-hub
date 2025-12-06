@@ -1,5 +1,6 @@
 export { Container } from "./container";
 export { Header } from "./header";
+export { ConditionalHeader } from "./conditional-header";
 export { Title } from "./title";
 export { Categories } from "./categories";
 export { SortPopup } from "./sort-popup";
@@ -31,6 +32,11 @@ export { RequiredSymbol } from "./required-symbol";
 export { ErrorText } from "./error-text";
 export { ClearButton } from "./clear-button";
 export { AddressInput } from "./address-input";
+export { ProfileButton } from "./profile-button";
+export { LogoutButton } from "./logout-button";
+export { InfoBlock } from "./info-block";
+export { ProfileForm } from "./profile-form";
+export { Stories } from "./stories";
 export * from "./email-temapltes";
 export * from "./checkout";
 export * from "./modals";

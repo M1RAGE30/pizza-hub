@@ -4,6 +4,7 @@ import crypto from "crypto";
 import { findOrCreateCart } from "@/shared/lib/find-or-create-cart";
 import { CreateCartItemValues } from "@/shared/services/dto/cart.dto";
 import { updateCartTotalAmount } from "@/shared/lib/update-cart-total-amount";
+import { errorResponse } from "@/shared/lib/api-helpers";
 
 export async function GET(req: NextRequest) {
   try {
@@ -15,11 +16,7 @@ export async function GET(req: NextRequest) {
 
     const userCart = await prisma.cart.findFirst({
       where: {
-        OR: [
-          {
-            token,
-          },
-        ],
+        token,
       },
       include: {
         items: {
@@ -40,11 +37,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(userCart);
   } catch (error) {
-    console.log("[CART_GET] Server error", error);
-    return NextResponse.json(
-      { message: "Не удалось получить корзину" },
-      { status: 500 }
-    );
+    return errorResponse("Не удалось получить корзину", 500, error);
   }
 }
 
@@ -60,7 +53,6 @@ export async function POST(req: NextRequest) {
 
     const data = (await req.json()) as CreateCartItemValues;
 
-    // Получаем все товары в корзине с тем же productItemId
     const cartItems = await prisma.cartItem.findMany({
       where: {
         cartId: userCart.id,
@@ -71,18 +63,15 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Сортируем ID ингредиентов для сравнения
     const requestedIngredientIds = (data.ingredients || []).sort(
       (a, b) => a - b
     );
 
-    // Ищем точное совпадение набора ингредиентов
     const findCartItem = cartItems.find((item) => {
       const itemIngredientIds = item.ingredients
         .map((ingredient) => ingredient.id)
         .sort((a, b) => a - b);
 
-      // Проверяем точное совпадение: одинаковое количество и одинаковые ID
       return (
         itemIngredientIds.length === requestedIngredientIds.length &&
         itemIngredientIds.every(
@@ -117,10 +106,6 @@ export async function POST(req: NextRequest) {
     resp.cookies.set("cartToken", token);
     return resp;
   } catch (error) {
-    console.log("[CART_POST] Server error", error);
-    return NextResponse.json(
-      { message: "Не удалось создать корзину" },
-      { status: 500 }
-    );
+    return errorResponse("Не удалось создать корзину", 500, error);
   }
 }

@@ -1,8 +1,11 @@
+"use client";
+
 import { cn } from "@/shared/lib/utils";
 import React from "react";
 import { Container } from "./container";
 import { Categories } from "./categories";
 import { SortPopup } from "./sort-popup";
+import { CartButton } from "./cart-button";
 import { Category } from "@prisma/client";
 
 interface Props {
@@ -11,16 +14,40 @@ interface Props {
 }
 
 export const TopBar: React.FC<Props> = ({ categories, className }) => {
+  const [isScrolled, setIsScrolled] = React.useState(false);
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      setIsScrolled(scrollY > 100);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <div
       className={cn(
-        "sticky top-0 bg-white py-5 shadow-lg shadow-black/5 z-10",
+        "sticky top-0 bg-white py-5 shadow-lg shadow-black/5 z-10 transition-all duration-300",
         className
       )}
     >
-      <Container className="flex items-center justify-between ">
+      <Container className="flex items-center justify-between">
         <Categories items={categories} />
-        <SortPopup />
+        <div className="flex items-center gap-3">
+          <SortPopup />
+          <div
+            className={cn(
+              "transition-all duration-300 overflow-hidden",
+              isScrolled
+                ? "opacity-100 max-w-[200px] translate-x-0"
+                : "opacity-0 max-w-0 -translate-x-4"
+            )}
+          >
+            <CartButton />
+          </div>
+        </div>
       </Container>
     </div>
   );

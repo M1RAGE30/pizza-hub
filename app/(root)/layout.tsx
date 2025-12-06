@@ -1,4 +1,4 @@
-import { Header } from "@/shared/components";
+import { ConditionalHeader } from "@/shared/components/shared/conditional-header";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
@@ -16,7 +16,7 @@ export default function HomeLayout({
   return (
     <main className="min-h-screen">
       <Suspense>
-        <Header />
+        <ConditionalHeader />
       </Suspense>
       {children}
       {modal}

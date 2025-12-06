@@ -1,6 +1,7 @@
 import { prisma } from "@/prisma/prisma-client";
 import { updateCartTotalAmount } from "@/shared/lib";
 import { NextRequest, NextResponse } from "next/server";
+import { errorResponse } from "@/shared/lib/api-helpers";
 
 export async function PATCH(
   req: NextRequest,
@@ -39,11 +40,7 @@ export async function PATCH(
 
     return NextResponse.json(updatedUserCart);
   } catch (error) {
-    console.log("[CART_PATCH] Server error", error);
-    return NextResponse.json(
-      { message: "Не удалось обновить корзину" },
-      { status: 500 }
-    );
+    return errorResponse("Не удалось обновить корзину", 500, error);
   }
 }
 
@@ -80,10 +77,6 @@ export async function DELETE(
 
     return NextResponse.json(updatedUserCart);
   } catch (error) {
-    console.log("[CART_DELETE] Server error", error);
-    return NextResponse.json(
-      { message: "Не удалось удалить корзину" },
-      { status: 500 }
-    );
+    return errorResponse("Не удалось удалить корзину", 500, error);
   }
 }
