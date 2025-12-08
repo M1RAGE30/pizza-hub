@@ -25,12 +25,6 @@ const getProviderInfo = (provider: string | null) => {
   if (!provider) return null;
 
   const providers = {
-    github: {
-      name: "GitHub",
-      icon: "https://github.com/favicon.ico",
-      color: "bg-gray-800",
-      textColor: "text-white",
-    },
     google: {
       name: "Google",
       icon: "https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg",
@@ -64,7 +58,7 @@ export const ProfileForm: React.FC<Props> = ({ data }) => {
         password: isOAuthUser ? undefined : formData.password,
       });
 
-      toast.success("Данные обновлены 📝", {
+      toast.success("Данные обновлены", {
         icon: "✅",
       });
     } catch (error) {

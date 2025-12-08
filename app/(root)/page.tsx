@@ -31,15 +31,15 @@ export default async function Home({
 
       <Stories />
 
-          <Container className="mt-10 pb-14">
-            <div className="flex gap-[80px]">
-              <div className="w-[250px]">
+      <Container className="mt-10 pb-14">
+        <div className="flex gap-[80px]">
+          <div className="w-[250px]">
             <Suspense>
               <Filters />
-                </Suspense>
-              </div>
+            </Suspense>
+          </div>
 
-              <div className="flex-1">
+          <div className="flex-1">
             <div className="flex flex-col gap-16">
               {categories.map(
                 (category) =>

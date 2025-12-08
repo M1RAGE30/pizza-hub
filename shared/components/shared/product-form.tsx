@@ -31,11 +31,15 @@ export const ProductForm: React.FC<Props> = ({
         ingredients,
       });
 
-      toast.success(product.name + " добавлен в корзину");
+      toast.success("Товар добавлен в корзину", {
+        icon: "✅",
+      });
 
       _onSubmit?.();
     } catch (err) {
-      toast.error("Не удалось добавить товар в корзину");
+      toast.error("Не удалось добавить товар в корзину", {
+        icon: "❌",
+      });
       console.error(err);
     }
   };

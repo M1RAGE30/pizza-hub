@@ -24,9 +24,9 @@ export const ProductsGroupList: React.FC<Props> = ({
   className,
 }) => {
   const setActiveCategoryId = useCategoryStore((state) => state.setActiveId);
-  const intersectionRef = React.useRef(null);
+  const intersectionRef = React.useRef<HTMLDivElement>(null);
   const intersection = useIntersection(intersectionRef, {
-    threshold: 0.8,
+    threshold: 0.4,
   });
 
   React.useEffect(() => {

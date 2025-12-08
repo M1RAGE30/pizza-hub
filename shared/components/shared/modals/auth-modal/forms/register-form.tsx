@@ -53,7 +53,7 @@ export const RegisterForm: React.FC<Props> = ({ onClose, onClickLogin, onShowVer
   };
 
   const handleVerificationSuccess = () => {
-    toast.success('Регистрация успешна! 🎉', {
+    toast.success('Регистрация успешна', {
       icon: '✅',
     });
     onClose?.();

@@ -35,17 +35,18 @@ export const Header: React.FC<Props> = ({
     let toastMessage = "";
 
     if (searchParams.has("paid")) {
-      toastMessage = "Заказ успешно оплачен! Информация отправлена на почту.";
+      toastMessage = "Заказ оплачен";
     }
 
     if (searchParams.has("verified")) {
-      toastMessage = "Почта успешно подтверждена!";
+      toastMessage = "Почта подтверждена";
     }
 
     if (toastMessage) {
       setTimeout(() => {
         router.replace("/");
         toast.success(toastMessage, {
+          icon: "✅",
           duration: 3000,
         });
       }, 1000);

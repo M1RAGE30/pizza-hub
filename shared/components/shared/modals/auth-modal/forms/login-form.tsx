@@ -50,8 +50,8 @@ export const LoginForm: React.FC<Props> = ({ onClose, onShowVerification }) => {
         await checkUserAndResendCode(data.email, data.password);
         setUserEmail(data.email);
         setShowVerification(true);
-        toast.success("Новый код подтверждения отправлен на вашу почту", {
-          icon: "📧",
+        toast.success("Код подтверждения отправлен на почту", {
+          icon: "✅",
         });
       } catch (verificationError: any) {
         throw new Error("Неверный email или пароль");
@@ -66,7 +66,7 @@ export const LoginForm: React.FC<Props> = ({ onClose, onShowVerification }) => {
   };
 
   const handleVerificationSuccess = () => {
-    toast.success("Почта подтверждена! Теперь вы можете войти", {
+    toast.success("Почта подтверждена", {
       icon: "✅",
     });
     setShowVerification(false);

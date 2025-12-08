@@ -67,7 +67,7 @@ export default function CheckoutPage() {
 
       const url = await createOrder(data);
 
-      toast.error("Заказ успешно оформлен! 📝 Переход на оплату... ", {
+      toast.success("Заказ оформлен. Переход на оплату...", {
         icon: "✅",
       });
 

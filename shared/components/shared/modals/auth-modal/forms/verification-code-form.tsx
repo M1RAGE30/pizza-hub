@@ -77,7 +77,7 @@ export const VerificationCodeForm: React.FC<Props> = ({ email, onSuccess }) => {
       setLoading(true);
       await verifyCode(code);
 
-      toast.success("Почта успешно подтверждена! 🎉", {
+      toast.success("Почта подтверждена", {
         icon: "✅",
       });
 
