@@ -4,7 +4,7 @@ interface Props {
   orderId: number;
 }
 
-export const OrderFailedTemplate: React.FC<Props> = ({ orderId }) => (
+export const OrderFailedTemplate: React.FC<Props> = ({ orderId }): React.ReactElement => (
   <div>
     <h1>Оплата не прошла ❌</h1>
 

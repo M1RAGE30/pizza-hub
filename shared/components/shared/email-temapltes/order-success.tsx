@@ -6,7 +6,7 @@ interface Props {
   items: CartItemDTO[];
 }
 
-export const OrderSuccessTemplate: React.FC<Props> = ({ orderId, items }) => (
+export const OrderSuccessTemplate: React.FC<Props> = ({ orderId, items }): React.ReactElement => (
   <div>
     <h1>Спасибо за покупку! 🎉</h1>
 

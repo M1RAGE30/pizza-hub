@@ -13,31 +13,45 @@ interface Props {
   className?: string;
 }
 
-const throttle = <T extends (...args: any[]) => void>(
-  func: T,
-  limit: number
-): ((...args: Parameters<T>) => void) => {
-  let inThrottle: boolean;
-  return function (this: any, ...args: Parameters<T>) {
-    if (!inThrottle) {
-      func.apply(this, args);
-      inThrottle = true;
-      setTimeout(() => (inThrottle = false), limit);
-    }
-  };
-};
-
 export const TopBar: React.FC<Props> = ({ categories, className }) => {
   const [isScrolled, setIsScrolled] = React.useState(false);
+  const [isMounted, setIsMounted] = React.useState(false);
+  const rafIdRef = React.useRef<number | null>(null);
 
   React.useEffect(() => {
-    const handleScroll = throttle(() => {
-      const scrollY = window.scrollY;
-      setIsScrolled(scrollY > 100);
-    }, 100);
+    setIsMounted(true);
+    
+    const checkScroll = () => {
+      if (typeof window !== "undefined") {
+        const scrollY = window.scrollY;
+        setIsScrolled(scrollY > 100);
+      }
+    };
+
+    checkScroll();
+
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        rafIdRef.current = requestAnimationFrame(() => {
+          checkScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    
+    window.addEventListener("resize", checkScroll, { passive: true });
+    
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", checkScroll);
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current);
+      }
+    };
   }, []);
 
   return (
@@ -51,16 +65,20 @@ export const TopBar: React.FC<Props> = ({ categories, className }) => {
         <Categories items={categories} />
         <div className="flex items-center gap-3">
           <SortPopup />
-          <div
-            className={cn(
-              "transition-all duration-300 overflow-hidden",
-              isScrolled
-                ? "opacity-100 max-w-[200px] translate-x-0"
-                : "opacity-0 max-w-0 -translate-x-4"
-            )}
-          >
-            <CartButton />
-          </div>
+          {isMounted && (
+            <div
+              className={cn(
+                "transition-all duration-500 ease-out",
+                isScrolled
+                  ? "opacity-100 translate-x-0 w-auto"
+                  : "opacity-0 translate-x-4 w-0 overflow-hidden pointer-events-none"
+              )}
+            >
+              <div className="whitespace-nowrap">
+                <CartButton />
+              </div>
+            </div>
+          )}
         </div>
       </Container>
     </div>

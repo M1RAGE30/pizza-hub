@@ -75,7 +75,7 @@ export default function CheckoutPage() {
         location.href = url;
       }
     } catch (err) {
-      console.log(err);
+      console.error("Failed to create order:", err);
       setSubmitting(false);
       toast.error("Не удалось создать заказ", {
         icon: "❌",

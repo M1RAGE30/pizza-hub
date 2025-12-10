@@ -6,7 +6,7 @@ interface Props {
   paymentUrl: string;
 }
 
-export const PayOrderTemplate: React.FC<Props> = ({ orderId, totalAmount, paymentUrl }) => (
+export const PayOrderTemplate: React.FC<Props> = ({ orderId, totalAmount, paymentUrl }): React.ReactElement => (
   <div>
     <h1>Заказ #{orderId}</h1>
 

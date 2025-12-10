@@ -3,7 +3,8 @@
 import { prisma } from "@/prisma/prisma-client";
 import { PayOrderTemplate } from "@/shared/components";
 import { CheckoutFormValues } from "@/shared/constants";
-import { createPayment, sendEmail } from "@/shared/lib";
+import { createPayment } from "@/shared/lib";
+import { sendEmail } from "@/shared/lib/send-email";
 import { getUserSession } from "@/shared/lib/get-user-session";
 import {
   createAndSendVerificationCode,
@@ -45,7 +46,7 @@ export async function createOrder(data: CheckoutFormValues) {
       throw new Error("Cart not found");
     }
 
-    if (userCart?.totalAmount === 0) {
+    if (!userCart || userCart.totalAmount === 0) {
       throw new Error("Cart is empty");
     }
 
@@ -106,12 +107,12 @@ export async function createOrder(data: CheckoutFormValues) {
         orderId: order.id,
         totalAmount: order.totalAmount,
         paymentUrl,
-      }) as any
+      })
     );
 
     return paymentUrl;
   } catch (err) {
-    console.log("[CreateOrder] Server error", err);
+    console.error("[CreateOrder] Server error", err);
     throw err;
   }
 }
@@ -154,7 +155,7 @@ export async function updateUserInfo(body: Prisma.UserUpdateInput) {
       data: updateData,
     });
   } catch (err) {
-    console.log("Error [UPDATE_USER]", err);
+    console.error("Error [UPDATE_USER]", err);
     throw err;
   }
 }
@@ -162,9 +163,10 @@ export async function updateUserInfo(body: Prisma.UserUpdateInput) {
 export async function verifyCode(code: string) {
   try {
     await verifyVerificationCode(code);
-  } catch (err: any) {
-    console.log("Error [VERIFY_CODE]", err);
-    throw new Error(err?.message || "Ошибка при подтверждении кода");
+  } catch (err) {
+    console.error("Error [VERIFY_CODE]", err);
+    const errorMessage = err instanceof Error ? err.message : "Ошибка при подтверждении кода";
+    throw new Error(errorMessage);
   }
 }
 
@@ -180,6 +182,14 @@ export async function checkUserAndResendCode(email: string, password: string) {
       throw new Error("Пользователь не найден");
     }
 
+    if (user.provider) {
+      throw new Error("Этот аккаунт использует OAuth авторизацию");
+    }
+
+    if (!user.password) {
+      throw new Error("Пароль не установлен");
+    }
+
     const isPasswordValid = await compare(password, user.password);
 
     if (!isPasswordValid) {
@@ -191,9 +201,10 @@ export async function checkUserAndResendCode(email: string, password: string) {
     }
 
     await createAndSendVerificationCode(user.id, user.email);
-  } catch (err: any) {
-    console.log("Error [CHECK_AND_RESEND_CODE]", err);
-    throw new Error(err?.message || "Ошибка при отправке кода");
+  } catch (err) {
+    console.error("Error [CHECK_AND_RESEND_CODE]", err);
+    const errorMessage = err instanceof Error ? err.message : "Ошибка при отправке кода";
+    throw new Error(errorMessage);
   }
 }
 
@@ -214,9 +225,10 @@ export async function resendVerificationCode(email: string) {
     }
 
     await createAndSendVerificationCode(user.id, user.email);
-  } catch (err: any) {
-    console.log("Error [RESEND_VERIFICATION_CODE]", err);
-    throw new Error(err?.message || "Ошибка при отправке кода");
+  } catch (err) {
+    console.error("Error [RESEND_VERIFICATION_CODE]", err);
+    const errorMessage = err instanceof Error ? err.message : "Ошибка при отправке кода";
+    throw new Error(errorMessage);
   }
 }
 
@@ -246,9 +258,9 @@ export async function registerUser(body: Prisma.UserCreateInput) {
     });
 
     await createAndSendVerificationCode(createdUser.id, createdUser.email);
-  } catch (err: any) {
-    console.log("Error [CREATE_USER]", err);
-    const errorMessage = err?.message || "Ошибка при регистрации";
+  } catch (err) {
+    console.error("Error [CREATE_USER]", err);
+    const errorMessage = err instanceof Error ? err.message : "Ошибка при регистрации";
     throw new Error(errorMessage);
   }
 }

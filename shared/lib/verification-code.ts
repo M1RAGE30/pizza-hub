@@ -33,7 +33,7 @@ export async function sendVerificationCode(
     await sendEmail(
       email,
       "Next Pizza / 📝 Подтверждение регистрации",
-      VerificationUserTemplate({ code }) as any
+      VerificationUserTemplate({ code })
     );
   } catch (error) {
     console.log("Error [SEND_VERIFICATION_CODE]", error);

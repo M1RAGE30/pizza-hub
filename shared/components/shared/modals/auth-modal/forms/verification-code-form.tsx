@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { verifyCode } from "@/app/actions";
 import { Button } from "@/shared/components/ui";
 import { Title } from "../../../title";
-import { Mail } from "lucide-react";
+import Image from "next/image";
 import { Input } from "@/shared/components/ui";
 import { cn } from "@/shared/lib/utils";
 
@@ -113,7 +113,13 @@ export const VerificationCodeForm: React.FC<Props> = ({ email, onSuccess }) => {
           </p>
         </div>
         <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 ml-4">
-          <Mail className="w-7 h-7 text-primary" />
+          <Image
+            src="/assets/images/numbers-icon.png"
+            alt="Код подтверждения"
+            width={28}
+            height={28}
+            className="object-contain"
+          />
         </div>
       </div>
 
