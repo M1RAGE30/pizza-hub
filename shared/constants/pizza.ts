@@ -1,7 +1,8 @@
 export const mapPizzaSize = {
-  20: "Маленькая",
-  30: "Средняя",
-  40: "Большая",
+  20: "20 см",
+  25: "25 см",
+  30: "30 см",
+  35: "35 см",
 } as const;
 
 export const mapPizzaType = {

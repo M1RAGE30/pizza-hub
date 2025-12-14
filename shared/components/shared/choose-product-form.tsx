@@ -7,18 +7,17 @@ interface Props {
   imageUrl: string;
   name: string;
   price: number;
+  description?: string | null;
   loading?: boolean;
   onSubmit?: VoidFunction;
   className?: string;
 }
 
-/**
- * Форма выбора ПРОДУКТА
- */
 export const ChooseProductForm: React.FC<Props> = ({
   name,
   imageUrl,
   price,
+  description,
   onSubmit,
   className,
   loading,
@@ -34,7 +33,11 @@ export const ChooseProductForm: React.FC<Props> = ({
       </div>
 
       <div className="w-[490px] bg-[#f7f6f5] p-7">
-        <Title text={name} size="md" className="font-extrabold mb-1" />
+        <Title text={name} size="md" className="font-extrabold mb-2" />
+
+        {description && (
+          <p className="text-gray-600 text-sm mb-6 leading-relaxed">{description}</p>
+        )}
 
         <Button
           loading={loading}

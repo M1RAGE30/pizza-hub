@@ -32,7 +32,7 @@ export async function sendVerificationCode(
   try {
     await sendEmail(
       email,
-      "Next Pizza / 📝 Подтверждение регистрации",
+      "Pizza Hub / 📝 Подтверждение регистрации",
       VerificationUserTemplate({ code })
     );
   } catch (error) {

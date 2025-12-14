@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { ingredients, categories, products } from "./constants";
+import { ingredients, categories, products, productPrices } from "./constants";
 import { prisma } from "./prisma-client";
 import { hashSync } from "bcrypt";
 
@@ -11,14 +11,16 @@ const generateProductItem = ({
   productId,
   pizzaType,
   size,
+  price,
 }: {
   productId: number;
   pizzaType?: 1 | 2;
-  size?: 20 | 30 | 40;
+  size?: 20 | 25 | 30 | 35;
+  price?: number;
 }) => {
   return {
     productId,
-    price: randomDecimalNumber(190, 600),
+    price: price || randomDecimalNumber(190, 600),
     pizzaType,
     size,
   } as Prisma.ProductItemUncheckedCreateInput;
@@ -56,67 +58,80 @@ async function up() {
     data: products,
   });
 
+  const createdProducts = await prisma.product.findMany({
+    where: {
+      name: {
+        in: products.map((p) => p.name),
+      },
+    },
+  });
+
   const pizza1 = await prisma.product.create({
     data: {
-      name: "Пепперони",
+      name: "Пицца с хреном",
       imageUrl:
-        "https://media.dodostatic.net/image/r:292x292/019ac20b311478aca7173b34234cfe4f.avif",
+        "https://media.dodostatic.net/image/r:233x233/0199b8e98ec871ab8a443887a3e1a136.avif",
+      description:
+        "Возможно первая в истории пицца с пикантным сливочным хреном, свиной шейкой и маринованными огурчиками. Дерзайте пробовать!",
       categoryId: 1,
       ingredients: {
-        connect: ingredients.slice(0, 5),
+        connect: ingredients,
       },
     },
   });
 
   const pizza2 = await prisma.product.create({
     data: {
-      name: "Сырная",
+      name: "Додо",
       imageUrl:
-        "https://media.dodostatic.net/image/r:292x292/019ac211f0fb7763b59205265e5ac19e.avif",
+        "https://media.dodostatic.net/image/r:233x233/019ac604bad37209b1ec496bbdd98560.avif",
+      description:
+        "Секрет обновленной пиццы — в новом соусе. Он усиливает вкус и делает сочетание бекона, говядины и пепперони еще мяснее!",
       categoryId: 1,
       ingredients: {
-        connect: ingredients.slice(5, 10),
+        connect: ingredients,
       },
     },
   });
 
   const pizza3 = await prisma.product.create({
     data: {
-      name: "Чоризо фреш",
+      name: "Пепперони фреш",
       imageUrl:
-        "https://media.dodostatic.net/image/r:292x292/019ac21b97aa73d7ad75a1ae1ab14542.avif",
+        "https://media.dodostatic.net/image/r:233x233/0198bf57bc517218ab93c762f4b0193e.avif",
+      description:
+        "Пикантная пепперони, увеличенная порция моцареллы, томаты, фирменный томатный соус",
       categoryId: 1,
       ingredients: {
-        connect: ingredients.slice(10, 40),
+        connect: ingredients,
       },
     },
   });
 
   const pizza4 = await prisma.product.create({
     data: {
-      name: "Маргарита",
+      name: "Чесночный цыпленок",
       imageUrl:
-        "https://media.dodostatic.net/image/r:292x292/019ac20b311478aca7173b34234cfe4f.avif",
+        "https://media.dodostatic.net/image/r:233x233/0198bf24170179679a7872f2ddf16d18.avif",
+      description:
+        "Цыпленок, чеснок, томаты, моцарелла, фирменный соус альфредо",
       categoryId: 1,
       ingredients: {
-        connect: [ingredients[1], ingredients[2], ingredients[9]],
+        connect: ingredients,
       },
     },
   });
 
   const pizza5 = await prisma.product.create({
     data: {
-      name: "Гавайская",
+      name: "Терияки",
       imageUrl:
-        "https://media.dodostatic.net/image/r:292x292/019ac21b97aa73d7ad75a1ae1ab14542.avif",
+        "https://media.dodostatic.net/image/r:233x233/019a10a0c9ab792190a97768688bc6e9.avif",
+      description:
+        "Цыпленок, красный лук, сладкий перец, соус терияки, сыр моцарелла и фирменный соус альфредо",
       categoryId: 1,
       ingredients: {
-        connect: [
-          ingredients[1],
-          ingredients[4],
-          ingredients[12],
-          ingredients[9],
-        ],
+        connect: ingredients,
       },
     },
   });
@@ -125,152 +140,551 @@ async function up() {
     data: {
       name: "Четыре сыра",
       imageUrl:
-        "https://media.dodostatic.net/image/r:292x292/019ac211f0fb7763b59205265e5ac19e.avif",
+        "https://media.dodostatic.net/image/r:233x233/019a109fe01672189d029a725ba99705.avif",
+      description:
+        "Сыр блю чиз, сыры чеддер и пармезан, моцарелла, фирменный соус альфредо",
       categoryId: 1,
       ingredients: {
-        connect: [
-          ingredients[0],
-          ingredients[1],
-          ingredients[2],
-          ingredients[14],
-        ],
+        connect: ingredients,
       },
     },
   });
 
   const pizza7 = await prisma.product.create({
     data: {
-      name: "Мясная",
+      name: "Сырная",
       imageUrl:
-        "https://media.dodostatic.net/image/r:292x292/019ac20b311478aca7173b34234cfe4f.avif",
+        "https://media.dodostatic.net/image/r:233x233/0198bf40eb1171aabe90b1b3ce07c0c5.avif",
+      description: "Моцарелла, сыры чеддер и пармезан, фирменный соус альфредо",
       categoryId: 1,
       ingredients: {
-        connect: [
-          ingredients[1],
-          ingredients[4],
-          ingredients[6],
-          ingredients[7],
-          ingredients[16],
-        ],
+        connect: ingredients,
       },
     },
   });
 
   const pizza8 = await prisma.product.create({
     data: {
-      name: "Овощная",
+      name: "Чоризо фреш",
       imageUrl:
-        "https://media.dodostatic.net/image/r:292x292/019ac21b97aa73d7ad75a1ae1ab14542.avif",
+        "https://media.dodostatic.net/image/r:233x233/0198bf4f806371f19d529f9e9e7dba36.avif",
+      description:
+        "Острые колбаски чоризо, сладкий перец, моцарелла, фирменный томатный соус",
       categoryId: 1,
       ingredients: {
-        connect: [
-          ingredients[1],
-          ingredients[5],
-          ingredients[10],
-          ingredients[11],
-          ingredients[13],
-        ],
+        connect: ingredients,
       },
     },
   });
 
-  const breakfast1 = await prisma.product.create({
+  const pizza9 = await prisma.product.create({
     data: {
-      name: "Овсянка с ягодами",
+      name: "Ветчина и сыр",
       imageUrl:
-        "https://media.dodostatic.net/image/r:292x292/11EE7970321044479C1D1085457A36EB.webp",
-      categoryId: 2,
+        "https://media.dodostatic.net/image/r:233x233/0198bf283b2372ea8e7cfc8adae9ea84.avif",
+      description: "Ветчина, моцарелла, фирменный соус альфредо",
+      categoryId: 1,
+      ingredients: {
+        connect: ingredients,
+      },
     },
   });
 
-  const breakfast2 = await prisma.product.create({
+  const pizza10 = await prisma.product.create({
     data: {
-      name: "Сырники",
+      name: "Двойной цыпленок",
       imageUrl:
-        "https://media.dodostatic.net/image/r:292x292/11EE94ECF33B0C46BA410DEC1B1DD6F8.webp",
-      categoryId: 2,
+        "https://media.dodostatic.net/image/r:233x233/0198bf3e424371b49f0b8d7dbe320a70.avif",
+      description:
+        "Двойная порция цыпленка, моцарелла, фирменный соус альфредо",
+      categoryId: 1,
+      ingredients: {
+        connect: ingredients,
+      },
     },
   });
 
-  const breakfast3 = await prisma.product.create({
+  const pizza11 = await prisma.product.create({
     data: {
-      name: "Блины с вареньем",
+      name: "Креветка и песто",
       imageUrl:
-        "https://media.dodostatic.net/image/r:292x292/11EE7D61B0C26A3F85D97A78FEEE00AD.webp",
-      categoryId: 2,
+        "https://media.dodostatic.net/image/r:233x233/0198bf4d218b75d4a3e667fc2f6d7643.avif",
+      description:
+        "Креветки, томаты, шампиньоны, соус песто, моцарелла, итальянские травы, фирменный томатный соус",
+      categoryId: 1,
+      ingredients: {
+        connect: ingredients,
+      },
+    },
+  });
+
+  const pizza12 = await prisma.product.create({
+    data: {
+      name: "Чилл Грилл",
+      imageUrl:
+        "https://media.dodostatic.net/image/r:233x233/0198bf4624de7324966f2fc62c3ca673.avif",
+      description:
+        "Двойная порция цыпленка, маринованные огурчики, красный лук, соус гриль, моцарелла, чеснок, фирменный соус альфредо",
+      categoryId: 1,
+      ingredients: {
+        connect: ingredients,
+      },
     },
   });
 
   await prisma.productItem.createMany({
     data: [
-      // Пицца "Пепперони фреш"
-      generateProductItem({ productId: pizza1.id, pizzaType: 1, size: 20 }),
-      generateProductItem({ productId: pizza1.id, pizzaType: 2, size: 30 }),
-      generateProductItem({ productId: pizza1.id, pizzaType: 2, size: 40 }),
+      generateProductItem({
+        productId: pizza1.id,
+        pizzaType: 1,
+        size: 20,
+        price: 479,
+      }),
+      generateProductItem({
+        productId: pizza1.id,
+        pizzaType: 1,
+        size: 25,
+        price: 609,
+      }),
+      generateProductItem({
+        productId: pizza1.id,
+        pizzaType: 1,
+        size: 30,
+        price: 839,
+      }),
+      generateProductItem({
+        productId: pizza1.id,
+        pizzaType: 2,
+        size: 30,
+        price: 839,
+      }),
+      generateProductItem({
+        productId: pizza1.id,
+        pizzaType: 1,
+        size: 35,
+        price: 999,
+      }),
+      generateProductItem({
+        productId: pizza1.id,
+        pizzaType: 2,
+        size: 35,
+        price: 999,
+      }),
 
-      // Пицца "Сырная"
-      generateProductItem({ productId: pizza2.id, pizzaType: 1, size: 20 }),
-      generateProductItem({ productId: pizza2.id, pizzaType: 1, size: 30 }),
-      generateProductItem({ productId: pizza2.id, pizzaType: 1, size: 40 }),
-      generateProductItem({ productId: pizza2.id, pizzaType: 2, size: 20 }),
-      generateProductItem({ productId: pizza2.id, pizzaType: 2, size: 30 }),
-      generateProductItem({ productId: pizza2.id, pizzaType: 2, size: 40 }),
+      generateProductItem({
+        productId: pizza2.id,
+        pizzaType: 1,
+        size: 20,
+        price: 539,
+      }),
+      generateProductItem({
+        productId: pizza2.id,
+        pizzaType: 1,
+        size: 25,
+        price: 679,
+      }),
+      generateProductItem({
+        productId: pizza2.id,
+        pizzaType: 1,
+        size: 30,
+        price: 929,
+      }),
+      generateProductItem({
+        productId: pizza2.id,
+        pizzaType: 2,
+        size: 30,
+        price: 929,
+      }),
+      generateProductItem({
+        productId: pizza2.id,
+        pizzaType: 1,
+        size: 35,
+        price: 1099,
+      }),
+      generateProductItem({
+        productId: pizza2.id,
+        pizzaType: 2,
+        size: 35,
+        price: 1099,
+      }),
 
-      // Пицца "Чоризо фреш"
-      generateProductItem({ productId: pizza3.id, pizzaType: 1, size: 20 }),
-      generateProductItem({ productId: pizza3.id, pizzaType: 2, size: 30 }),
-      generateProductItem({ productId: pizza3.id, pizzaType: 2, size: 40 }),
+      generateProductItem({
+        productId: pizza3.id,
+        pizzaType: 1,
+        size: 20,
+        price: 289,
+      }),
+      generateProductItem({
+        productId: pizza3.id,
+        pizzaType: 1,
+        size: 25,
+        price: 369,
+      }),
+      generateProductItem({
+        productId: pizza3.id,
+        pizzaType: 1,
+        size: 30,
+        price: 629,
+      }),
+      generateProductItem({
+        productId: pizza3.id,
+        pizzaType: 2,
+        size: 30,
+        price: 629,
+      }),
+      generateProductItem({
+        productId: pizza3.id,
+        pizzaType: 1,
+        size: 35,
+        price: 749,
+      }),
+      generateProductItem({
+        productId: pizza3.id,
+        pizzaType: 2,
+        size: 35,
+        price: 749,
+      }),
 
-      // Пицца "Маргарита"
-      generateProductItem({ productId: pizza4.id, pizzaType: 1, size: 20 }),
-      generateProductItem({ productId: pizza4.id, pizzaType: 1, size: 30 }),
-      generateProductItem({ productId: pizza4.id, pizzaType: 2, size: 30 }),
-      generateProductItem({ productId: pizza4.id, pizzaType: 2, size: 40 }),
+      generateProductItem({
+        productId: pizza4.id,
+        pizzaType: 1,
+        size: 20,
+        price: 289,
+      }),
+      generateProductItem({
+        productId: pizza4.id,
+        pizzaType: 1,
+        size: 25,
+        price: 369,
+      }),
+      generateProductItem({
+        productId: pizza4.id,
+        pizzaType: 1,
+        size: 30,
+        price: 629,
+      }),
+      generateProductItem({
+        productId: pizza4.id,
+        pizzaType: 2,
+        size: 30,
+        price: 629,
+      }),
+      generateProductItem({
+        productId: pizza4.id,
+        pizzaType: 1,
+        size: 35,
+        price: 749,
+      }),
+      generateProductItem({
+        productId: pizza4.id,
+        pizzaType: 2,
+        size: 35,
+        price: 749,
+      }),
 
-      // Пицца "Гавайская"
-      generateProductItem({ productId: pizza5.id, pizzaType: 1, size: 20 }),
-      generateProductItem({ productId: pizza5.id, pizzaType: 2, size: 30 }),
-      generateProductItem({ productId: pizza5.id, pizzaType: 2, size: 40 }),
+      generateProductItem({
+        productId: pizza5.id,
+        pizzaType: 1,
+        size: 20,
+        price: 379,
+      }),
+      generateProductItem({
+        productId: pizza5.id,
+        pizzaType: 1,
+        size: 25,
+        price: 479,
+      }),
+      generateProductItem({
+        productId: pizza5.id,
+        pizzaType: 1,
+        size: 30,
+        price: 719,
+      }),
+      generateProductItem({
+        productId: pizza5.id,
+        pizzaType: 2,
+        size: 30,
+        price: 719,
+      }),
+      generateProductItem({
+        productId: pizza5.id,
+        pizzaType: 1,
+        size: 35,
+        price: 859,
+      }),
+      generateProductItem({
+        productId: pizza5.id,
+        pizzaType: 2,
+        size: 35,
+        price: 859,
+      }),
 
-      // Пицца "Четыре сыра"
-      generateProductItem({ productId: pizza6.id, pizzaType: 1, size: 20 }),
-      generateProductItem({ productId: pizza6.id, pizzaType: 1, size: 30 }),
-      generateProductItem({ productId: pizza6.id, pizzaType: 2, size: 30 }),
-      generateProductItem({ productId: pizza6.id, pizzaType: 2, size: 40 }),
+      generateProductItem({
+        productId: pizza6.id,
+        pizzaType: 1,
+        size: 20,
+        price: 399,
+      }),
+      generateProductItem({
+        productId: pizza6.id,
+        pizzaType: 1,
+        size: 25,
+        price: 499,
+      }),
+      generateProductItem({
+        productId: pizza6.id,
+        pizzaType: 1,
+        size: 30,
+        price: 749,
+      }),
+      generateProductItem({
+        productId: pizza6.id,
+        pizzaType: 2,
+        size: 30,
+        price: 749,
+      }),
+      generateProductItem({
+        productId: pizza6.id,
+        pizzaType: 1,
+        size: 35,
+        price: 899,
+      }),
+      generateProductItem({
+        productId: pizza6.id,
+        pizzaType: 2,
+        size: 35,
+        price: 899,
+      }),
 
-      // Пицца "Мясная"
-      generateProductItem({ productId: pizza7.id, pizzaType: 1, size: 20 }),
-      generateProductItem({ productId: pizza7.id, pizzaType: 2, size: 30 }),
-      generateProductItem({ productId: pizza7.id, pizzaType: 2, size: 40 }),
+      generateProductItem({
+        productId: pizza7.id,
+        pizzaType: 1,
+        size: 20,
+        price: 289,
+      }),
+      generateProductItem({
+        productId: pizza7.id,
+        pizzaType: 1,
+        size: 25,
+        price: 369,
+      }),
+      generateProductItem({
+        productId: pizza7.id,
+        pizzaType: 1,
+        size: 30,
+        price: 629,
+      }),
+      generateProductItem({
+        productId: pizza7.id,
+        pizzaType: 2,
+        size: 30,
+        price: 629,
+      }),
+      generateProductItem({
+        productId: pizza7.id,
+        pizzaType: 1,
+        size: 35,
+        price: 749,
+      }),
+      generateProductItem({
+        productId: pizza7.id,
+        pizzaType: 2,
+        size: 35,
+        price: 749,
+      }),
 
-      // Пицца "Овощная"
-      generateProductItem({ productId: pizza8.id, pizzaType: 1, size: 20 }),
-      generateProductItem({ productId: pizza8.id, pizzaType: 1, size: 30 }),
-      generateProductItem({ productId: pizza8.id, pizzaType: 2, size: 30 }),
+      generateProductItem({
+        productId: pizza8.id,
+        pizzaType: 1,
+        size: 20,
+        price: 289,
+      }),
+      generateProductItem({
+        productId: pizza8.id,
+        pizzaType: 1,
+        size: 25,
+        price: 369,
+      }),
+      generateProductItem({
+        productId: pizza8.id,
+        pizzaType: 1,
+        size: 30,
+        price: 629,
+      }),
+      generateProductItem({
+        productId: pizza8.id,
+        pizzaType: 2,
+        size: 30,
+        price: 629,
+      }),
+      generateProductItem({
+        productId: pizza8.id,
+        pizzaType: 1,
+        size: 35,
+        price: 749,
+      }),
+      generateProductItem({
+        productId: pizza8.id,
+        pizzaType: 2,
+        size: 35,
+        price: 749,
+      }),
 
-      // Завтрак
-      generateProductItem({ productId: breakfast1.id }),
-      generateProductItem({ productId: breakfast2.id }),
-      generateProductItem({ productId: breakfast3.id }),
+      generateProductItem({
+        productId: pizza9.id,
+        pizzaType: 1,
+        size: 20,
+        price: 339,
+      }),
+      generateProductItem({
+        productId: pizza9.id,
+        pizzaType: 1,
+        size: 25,
+        price: 429,
+      }),
+      generateProductItem({
+        productId: pizza9.id,
+        pizzaType: 1,
+        size: 30,
+        price: 679,
+      }),
+      generateProductItem({
+        productId: pizza9.id,
+        pizzaType: 2,
+        size: 30,
+        price: 679,
+      }),
+      generateProductItem({
+        productId: pizza9.id,
+        pizzaType: 1,
+        size: 35,
+        price: 799,
+      }),
+      generateProductItem({
+        productId: pizza9.id,
+        pizzaType: 2,
+        size: 35,
+        price: 799,
+      }),
 
-      // Остальные продукты
-      generateProductItem({ productId: 1 }),
-      generateProductItem({ productId: 2 }),
-      generateProductItem({ productId: 3 }),
-      generateProductItem({ productId: 4 }),
-      generateProductItem({ productId: 5 }),
-      generateProductItem({ productId: 6 }),
-      generateProductItem({ productId: 7 }),
-      generateProductItem({ productId: 8 }),
-      generateProductItem({ productId: 9 }),
-      generateProductItem({ productId: 10 }),
-      generateProductItem({ productId: 11 }),
-      generateProductItem({ productId: 12 }),
-      generateProductItem({ productId: 13 }),
-      generateProductItem({ productId: 14 }),
-      generateProductItem({ productId: 15 }),
-      generateProductItem({ productId: 16 }),
-      generateProductItem({ productId: 17 }),
+      generateProductItem({
+        productId: pizza10.id,
+        pizzaType: 1,
+        size: 20,
+        price: 349,
+      }),
+      generateProductItem({
+        productId: pizza10.id,
+        pizzaType: 1,
+        size: 25,
+        price: 439,
+      }),
+      generateProductItem({
+        productId: pizza10.id,
+        pizzaType: 1,
+        size: 30,
+        price: 689,
+      }),
+      generateProductItem({
+        productId: pizza10.id,
+        pizzaType: 2,
+        size: 30,
+        price: 689,
+      }),
+      generateProductItem({
+        productId: pizza10.id,
+        pizzaType: 1,
+        size: 35,
+        price: 809,
+      }),
+      generateProductItem({
+        productId: pizza10.id,
+        pizzaType: 2,
+        size: 35,
+        price: 809,
+      }),
+
+      generateProductItem({
+        productId: pizza11.id,
+        pizzaType: 1,
+        size: 20,
+        price: 519,
+      }),
+      generateProductItem({
+        productId: pizza11.id,
+        pizzaType: 1,
+        size: 25,
+        price: 649,
+      }),
+      generateProductItem({
+        productId: pizza11.id,
+        pizzaType: 1,
+        size: 30,
+        price: 929,
+      }),
+      generateProductItem({
+        productId: pizza11.id,
+        pizzaType: 2,
+        size: 30,
+        price: 929,
+      }),
+      generateProductItem({
+        productId: pizza11.id,
+        pizzaType: 1,
+        size: 35,
+        price: 1099,
+      }),
+      generateProductItem({
+        productId: pizza11.id,
+        pizzaType: 2,
+        size: 35,
+        price: 1099,
+      }),
+
+      generateProductItem({
+        productId: pizza12.id,
+        pizzaType: 1,
+        size: 20,
+        price: 399,
+      }),
+      generateProductItem({
+        productId: pizza12.id,
+        pizzaType: 1,
+        size: 25,
+        price: 499,
+      }),
+      generateProductItem({
+        productId: pizza12.id,
+        pizzaType: 1,
+        size: 30,
+        price: 749,
+      }),
+      generateProductItem({
+        productId: pizza12.id,
+        pizzaType: 2,
+        size: 30,
+        price: 749,
+      }),
+      generateProductItem({
+        productId: pizza12.id,
+        pizzaType: 1,
+        size: 35,
+        price: 899,
+      }),
+      generateProductItem({
+        productId: pizza12.id,
+        pizzaType: 2,
+        size: 35,
+        price: 899,
+      }),
+
+      ...createdProducts.map((product) => {
+        const price = productPrices[product.name];
+        return generateProductItem({
+          productId: product.id,
+          price: price,
+        });
+      }),
     ],
   });
 
@@ -329,7 +743,6 @@ async function up() {
 
   await prisma.storyItem.createMany({
     data: [
-      // Story 1
       {
         storyId: 1,
         sourceUrl:
@@ -355,7 +768,6 @@ async function up() {
         sourceUrl:
           "https://cdn.inappstory.ru/file/sy/vl/c7/uyqzmdojadcbw7o0a35ojxlcul.webp?k=IgAAAAAAAAAE",
       },
-      // Story 2
       {
         storyId: 2,
         sourceUrl:
@@ -371,7 +783,6 @@ async function up() {
         sourceUrl:
           "https://cdn.inappstory.ru/file/ts/p9/vq/zktyxdxnjqbzufonxd8ffk44cb.webp?k=IgAAAAAAAAAE",
       },
-      // Story 3
       {
         storyId: 3,
         sourceUrl:
@@ -382,7 +793,6 @@ async function up() {
         sourceUrl:
           "https://cdn.inappstory.ru/file/jv/sb/fh/io7c5zarojdm7eus0trn7czdet.webp?k=IgAAAAAAAAAE",
       },
-      // Story 4
       {
         storyId: 4,
         sourceUrl:
@@ -398,7 +808,6 @@ async function up() {
         sourceUrl:
           "https://cdn.inappstory.ru/file/ts/p9/vq/zktyxdxnjqbzufonxd8ffk44cb.webp?k=IgAAAAAAAAAE",
       },
-      // Story 5
       {
         storyId: 5,
         sourceUrl:
@@ -419,7 +828,6 @@ async function up() {
         sourceUrl:
           "https://cdn.inappstory.ru/file/ur/uq/le/9ufzwtpdjeekidqq04alfnxvu2.webp?k=IgAAAAAAAAAE",
       },
-      // Story 6
       {
         storyId: 6,
         sourceUrl:

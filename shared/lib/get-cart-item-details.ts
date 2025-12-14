@@ -1,5 +1,6 @@
-import { PizzaSize, PizzaType, mapPizzaType } from "../constants/pizza";
+import { PizzaSize, PizzaType } from "../constants/pizza";
 import { CartStateItem } from "./get-cart-details";
+import { getPizzaSizeDetails } from "./get-pizza-size-details";
 
 export const getCartItemDetails = (
   ingredients: CartStateItem["ingredients"],
@@ -9,9 +10,7 @@ export const getCartItemDetails = (
   const details = [];
 
   if (pizzaSize && pizzaType) {
-    details.push(
-      `${pizzaSize} см, ${String(mapPizzaType[pizzaType]).toLowerCase()} тесто`
-    );
+    details.push(getPizzaSizeDetails(pizzaSize, pizzaType));
   }
 
   if (ingredients) {

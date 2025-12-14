@@ -46,13 +46,13 @@ export async function POST(req: NextRequest) {
       if (isSucceeded) {
         await sendEmail(
           order.email,
-          "Next Pizza / Ваш заказ успешно оформлен 🎉",
+          "Pizza Hub / Ваш заказ успешно оформлен 🎉",
           OrderSuccessTemplate({ orderId: order.id, items })
         );
       } else {
         await sendEmail(
           order.email,
-          "Next Pizza / Оплата не прошла",
+          "Pizza Hub / Оплата не прошла",
           OrderFailedTemplate({ orderId: order.id })
         );
       }

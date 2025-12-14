@@ -23,9 +23,30 @@ import { Title } from "./title";
 import { cn } from "@/shared/lib/utils";
 import { useCart } from "@/shared/hooks";
 
+const getProductWord = (count: number): string => {
+  const lastDigit = count % 10;
+  const lastTwoDigits = count % 100;
+
+  if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
+    return "товаров";
+  }
+
+  if (lastDigit === 1) {
+    return "товар";
+  }
+
+  if (lastDigit >= 2 && lastDigit <= 4) {
+    return "товара";
+  }
+
+  return "товаров";
+};
+
 export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { totalAmount, updateItemQuantity, items, removeCartItem } = useCart();
   const [redirecting, setRedirecting] = React.useState(false);
+
+  const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
 
   const onClickCountButton = (
     id: number,
@@ -51,7 +72,9 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
             <SheetHeader>
               <SheetTitle>
                 В корзине{" "}
-                <span className="font-bold">{items.length} товара</span>
+                <span className="font-bold">
+                  {totalQuantity} {getProductWord(totalQuantity)}
+                </span>
               </SheetTitle>
             </SheetHeader>
           )}

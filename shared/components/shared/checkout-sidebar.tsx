@@ -2,9 +2,11 @@ import React from "react";
 import { WhiteBlock, CheckoutItemDetails, Button, Skeleton } from "../";
 import { ArrowRight, Package, Percent, Truck } from "lucide-react";
 import { cn } from "@/shared/lib/utils";
-
-const VAT = 15;
-const DELIVERY_PRICE = 250;
+import {
+  DELIVERY_PRICE,
+  calculateTotalPrice,
+  calculateVatPrice,
+} from "@/shared/constants/checkout";
 
 interface Props {
   totalAmount: number;
@@ -17,8 +19,8 @@ export const CheckoutSidebar: React.FC<Props> = ({
   loading,
   className,
 }) => {
-  const vatPrice = (totalAmount * VAT) / 100;
-  const totalPrice = totalAmount + DELIVERY_PRICE + vatPrice;
+  const vatPrice = calculateVatPrice(totalAmount);
+  const totalPrice = calculateTotalPrice(totalAmount);
 
   return (
     <WhiteBlock className={cn("p-6 sticky top-4", className)}>

@@ -79,8 +79,11 @@ export async function createOrder(data: CheckoutFormValues) {
       },
     });
 
+    const { calculateTotalPrice } = await import("@/shared/constants/checkout");
+    const totalPriceWithDeliveryAndTax = calculateTotalPrice(userCart.totalAmount);
+
     const paymentData = await createPayment({
-      amount: order.totalAmount,
+      amount: totalPriceWithDeliveryAndTax,
       orderId: order.id,
       description: "Оплата заказа #" + order.id,
     });
@@ -102,10 +105,11 @@ export async function createOrder(data: CheckoutFormValues) {
 
     await sendEmail(
       data.email,
-      "Next Pizza / Оплатите заказ #" + order.id,
+      "Pizza Hub / Оплатите заказ #" + order.id,
       PayOrderTemplate({
         orderId: order.id,
-        totalAmount: order.totalAmount,
+        totalAmount: totalPriceWithDeliveryAndTax,
+        cartAmount: userCart.totalAmount,
         paymentUrl,
       })
     );
@@ -165,7 +169,8 @@ export async function verifyCode(code: string) {
     await verifyVerificationCode(code);
   } catch (err) {
     console.error("Error [VERIFY_CODE]", err);
-    const errorMessage = err instanceof Error ? err.message : "Ошибка при подтверждении кода";
+    const errorMessage =
+      err instanceof Error ? err.message : "Ошибка при подтверждении кода";
     throw new Error(errorMessage);
   }
 }
@@ -203,7 +208,8 @@ export async function checkUserAndResendCode(email: string, password: string) {
     await createAndSendVerificationCode(user.id, user.email);
   } catch (err) {
     console.error("Error [CHECK_AND_RESEND_CODE]", err);
-    const errorMessage = err instanceof Error ? err.message : "Ошибка при отправке кода";
+    const errorMessage =
+      err instanceof Error ? err.message : "Ошибка при отправке кода";
     throw new Error(errorMessage);
   }
 }
@@ -227,7 +233,8 @@ export async function resendVerificationCode(email: string) {
     await createAndSendVerificationCode(user.id, user.email);
   } catch (err) {
     console.error("Error [RESEND_VERIFICATION_CODE]", err);
-    const errorMessage = err instanceof Error ? err.message : "Ошибка при отправке кода";
+    const errorMessage =
+      err instanceof Error ? err.message : "Ошибка при отправке кода";
     throw new Error(errorMessage);
   }
 }
@@ -260,7 +267,8 @@ export async function registerUser(body: Prisma.UserCreateInput) {
     await createAndSendVerificationCode(createdUser.id, createdUser.email);
   } catch (err) {
     console.error("Error [CREATE_USER]", err);
-    const errorMessage = err instanceof Error ? err.message : "Ошибка при регистрации";
+    const errorMessage =
+      err instanceof Error ? err.message : "Ошибка при регистрации";
     throw new Error(errorMessage);
   }
 }

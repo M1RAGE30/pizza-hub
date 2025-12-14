@@ -3,14 +3,13 @@ import React from "react";
 import { Title } from "./title";
 import { Button } from "../ui";
 import { Plus } from "lucide-react";
-import { Ingredient } from "@prisma/client";
 
 interface Props {
   id: number;
   name: string;
   price: number;
   imageUrl: string;
-  ingredients: Ingredient[];
+  description?: string | null;
   className?: string;
 }
 
@@ -19,23 +18,27 @@ export const ProductCard: React.FC<Props> = ({
   name,
   price,
   imageUrl,
-  ingredients,
+  description,
   className,
 }) => {
   return (
-    <div className={className}>
-      <Link href={`/product/${id}`}>
-        <div className="flex justify-center p-6 bg-secondary rounded-lg h-[260px]">
+    <div className={`flex flex-col h-full ${className}`}>
+      <Link href={`/product/${id}`} className="flex flex-col h-full">
+        <div className="flex justify-center p-6 bg-secondary rounded-lg h-[260px] flex-shrink-0">
           <img className="w-[215px] h-[215px]" src={imageUrl} alt={name} />
         </div>
 
-        <Title text={name} size="sm" className="mb-1 mt-3 font-bold" />
+        <Title text={name} size="sm" className="mb-2 mt-3 font-bold flex-shrink-0" />
 
-        <p className="text-sm text-gray-400">
-          {ingredients.map((ingredient) => ingredient.name).join(", ")}
-        </p>
+        <div className="min-h-[48px] mb-4 flex-shrink-0">
+          {description ? (
+            <p className="text-sm text-gray-400 leading-relaxed">{description}</p>
+          ) : (
+            <div></div>
+          )}
+        </div>
 
-        <div className="flex justify-between items-center mt-4">
+        <div className="flex justify-between items-center mt-auto flex-shrink-0">
           <span className="text-[20px]">
             от <b>{price} ₽</b>
           </span>
