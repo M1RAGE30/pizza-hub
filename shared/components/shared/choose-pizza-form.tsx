@@ -17,6 +17,7 @@ interface Props {
   imageUrl: string;
   name: string;
   description?: string | null;
+  composition?: number[] | null;
   ingredients: Ingredient[];
   items: ProductItem[];
   loading?: boolean;
@@ -76,7 +77,7 @@ export const ChoosePizzaForm: React.FC<Props> = ({
         <p className="text-gray-400 text-sm mb-3">{textDetaills}</p>
 
         {description && (
-          <p className="text-gray-600 text-sm mb-6 leading-relaxed">
+          <p className="text-gray-600 text-sm mb-4 leading-relaxed">
             {description}
           </p>
         )}

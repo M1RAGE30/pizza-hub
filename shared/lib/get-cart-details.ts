@@ -41,14 +41,14 @@ export const getCartDetails = (data: CartDTO | null): ReturnProps => {
         }));
 
     return {
-      id: item.id,
-      quantity: item.quantity,
-      name: item.productItem.product.name,
-      imageUrl: item.productItem.product.imageUrl,
-      price: calcCartItemTotalPrice(item),
-      pizzaSize: item.productItem.size,
-      pizzaType: item.productItem.pizzaType,
-      disabled: false,
+    id: item.id,
+    quantity: item.quantity,
+    name: item.productItem.product.name,
+    imageUrl: item.productItem.product.imageUrl,
+    price: calcCartItemTotalPrice(item),
+    pizzaSize: item.productItem.size,
+    pizzaType: item.productItem.pizzaType,
+    disabled: false,
       ingredients,
     };
   }) as CartStateItem[];

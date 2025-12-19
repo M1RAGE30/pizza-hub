@@ -42,6 +42,7 @@ model Product {
     name        String
     imageUrl    String
     description String?
+    composition Json?
 
     ingredients Ingredient[]
     items       ProductItem[]
