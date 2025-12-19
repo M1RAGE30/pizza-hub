@@ -66,6 +66,18 @@ async function up() {
     },
   });
 
+  const getIngredientIdsByName = (names: string[]): number[] => {
+    return ingredients
+      .filter((ing) =>
+        names.some(
+          (name) =>
+            ing.name.toLowerCase().includes(name.toLowerCase()) ||
+            name.toLowerCase().includes(ing.name.toLowerCase())
+        )
+      )
+      .map((ing) => ing.id);
+  };
+
   const pizza1 = await prisma.product.create({
     data: {
       name: "Пицца с хреном",
@@ -74,10 +86,16 @@ async function up() {
       description:
         "Возможно первая в истории пицца с пикантным сливочным хреном, свиной шейкой и маринованными огурчиками. Дерзайте пробовать!",
       categoryId: 1,
+      composition: getIngredientIdsByName([
+        "Свиная шейка",
+        "Красный лук",
+        "Маринованные огурчики",
+        "Моцарелла",
+      ]) as Prisma.InputJsonValue,
       ingredients: {
         connect: ingredients,
       },
-    },
+    } as any,
   });
 
   const pizza2 = await prisma.product.create({
@@ -88,10 +106,20 @@ async function up() {
       description:
         "Секрет обновленной пиццы — в новом соусе. Он усиливает вкус и делает сочетание бекона, говядины и пепперони еще мяснее!",
       categoryId: 1,
+      composition: getIngredientIdsByName([
+        "Бекон",
+        "Пряная говядина",
+        "Пикантная пепперони",
+        "Моцарелла",
+        "Свежие томаты",
+        "Шампиньоны",
+        "Сладкий перец",
+        "Красный лук",
+      ]) as Prisma.InputJsonValue,
       ingredients: {
         connect: ingredients,
       },
-    },
+    } as any,
   });
 
   const pizza3 = await prisma.product.create({
@@ -102,10 +130,15 @@ async function up() {
       description:
         "Пикантная пепперони, увеличенная порция моцареллы, томаты, фирменный томатный соус",
       categoryId: 1,
+      composition: getIngredientIdsByName([
+        "Пикантная пепперони",
+        "Моцарелла",
+        "Свежие томаты",
+      ]) as Prisma.InputJsonValue,
       ingredients: {
         connect: ingredients,
       },
-    },
+    } as any,
   });
 
   const pizza4 = await prisma.product.create({
@@ -116,10 +149,15 @@ async function up() {
       description:
         "Цыпленок, чеснок, томаты, моцарелла, фирменный соус альфредо",
       categoryId: 1,
+      composition: getIngredientIdsByName([
+        "Нежный цыпленок",
+        "Свежие томаты",
+        "Моцарелла",
+      ]) as Prisma.InputJsonValue,
       ingredients: {
         connect: ingredients,
       },
-    },
+    } as any,
   });
 
   const pizza5 = await prisma.product.create({
@@ -130,10 +168,16 @@ async function up() {
       description:
         "Цыпленок, красный лук, сладкий перец, соус терияки, сыр моцарелла и фирменный соус альфредо",
       categoryId: 1,
+      composition: getIngredientIdsByName([
+        "Нежный цыпленок",
+        "Сладкий перец",
+        "Красный лук",
+        "Моцарелла",
+      ]) as Prisma.InputJsonValue,
       ingredients: {
         connect: ingredients,
       },
-    },
+    } as any,
   });
 
   const pizza6 = await prisma.product.create({
@@ -144,10 +188,15 @@ async function up() {
       description:
         "Сыр блю чиз, сыры чеддер и пармезан, моцарелла, фирменный соус альфредо",
       categoryId: 1,
+      composition: getIngredientIdsByName([
+        "Сыр блю чиз",
+        "Сыры чеддер и пармезан",
+        "Моцарелла",
+      ]) as Prisma.InputJsonValue,
       ingredients: {
         connect: ingredients,
       },
-    },
+    } as any,
   });
 
   const pizza7 = await prisma.product.create({
@@ -157,10 +206,14 @@ async function up() {
         "https://media.dodostatic.net/image/r:233x233/0198bf40eb1171aabe90b1b3ce07c0c5.avif",
       description: "Моцарелла, сыры чеддер и пармезан, фирменный соус альфредо",
       categoryId: 1,
+      composition: getIngredientIdsByName([
+        "Моцарелла",
+        "Сыры чеддер и пармезан",
+      ]) as Prisma.InputJsonValue,
       ingredients: {
         connect: ingredients,
       },
-    },
+    } as any,
   });
 
   const pizza8 = await prisma.product.create({
@@ -171,10 +224,15 @@ async function up() {
       description:
         "Острые колбаски чоризо, сладкий перец, моцарелла, фирменный томатный соус",
       categoryId: 1,
+      composition: getIngredientIdsByName([
+        "Острая чоризо",
+        "Сладкий перец",
+        "Моцарелла",
+      ]) as Prisma.InputJsonValue,
       ingredients: {
         connect: ingredients,
       },
-    },
+    } as any,
   });
 
   const pizza9 = await prisma.product.create({
@@ -184,10 +242,14 @@ async function up() {
         "https://media.dodostatic.net/image/r:233x233/0198bf283b2372ea8e7cfc8adae9ea84.avif",
       description: "Ветчина, моцарелла, фирменный соус альфредо",
       categoryId: 1,
+      composition: getIngredientIdsByName([
+        "Ветчина",
+        "Моцарелла",
+      ]) as Prisma.InputJsonValue,
       ingredients: {
         connect: ingredients,
       },
-    },
+    } as any,
   });
 
   const pizza10 = await prisma.product.create({
@@ -198,10 +260,14 @@ async function up() {
       description:
         "Двойная порция цыпленка, моцарелла, фирменный соус альфредо",
       categoryId: 1,
+      composition: getIngredientIdsByName([
+        "Нежный цыпленок",
+        "Моцарелла",
+      ]) as Prisma.InputJsonValue,
       ingredients: {
         connect: ingredients,
       },
-    },
+    } as any,
   });
 
   const pizza11 = await prisma.product.create({
@@ -212,10 +278,17 @@ async function up() {
       description:
         "Креветки, томаты, шампиньоны, соус песто, моцарелла, итальянские травы, фирменный томатный соус",
       categoryId: 1,
+      composition: getIngredientIdsByName([
+        "Креветки",
+        "Свежие томаты",
+        "Шампиньоны",
+        "Моцарелла",
+        "Итальянские травы",
+      ]) as Prisma.InputJsonValue,
       ingredients: {
         connect: ingredients,
       },
-    },
+    } as any,
   });
 
   const pizza12 = await prisma.product.create({
@@ -226,10 +299,16 @@ async function up() {
       description:
         "Двойная порция цыпленка, маринованные огурчики, красный лук, соус гриль, моцарелла, чеснок, фирменный соус альфредо",
       categoryId: 1,
+      composition: getIngredientIdsByName([
+        "Нежный цыпленок",
+        "Маринованные огурчики",
+        "Красный лук",
+        "Моцарелла",
+      ]) as Prisma.InputJsonValue,
       ingredients: {
         connect: ingredients,
       },
-    },
+    } as any,
   });
 
   await prisma.productItem.createMany({

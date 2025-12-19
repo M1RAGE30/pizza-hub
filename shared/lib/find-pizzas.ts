@@ -43,20 +43,11 @@ export const findPizzas = async (params: GetSearchParams) => {
     }
   }
 
-  const categories = await prisma.category.findMany({
+  const allCategories = await prisma.category.findMany({
     include: {
       products: {
         orderBy,
         where: {
-          ingredients: ingredientsIdArr
-            ? {
-                some: {
-                  id: {
-                    in: ingredientsIdArr,
-                  },
-                },
-              }
-            : undefined,
           items: {
             some: {
               size: {
@@ -89,6 +80,18 @@ export const findPizzas = async (params: GetSearchParams) => {
       },
     },
   });
+
+  const categories = ingredientsIdArr
+    ? allCategories.map((category) => ({
+        ...category,
+        products: category.products.filter((product) => {
+          const composition = (product.composition as number[] | null) || [];
+          return ingredientsIdArr.some((ingredientId) =>
+            composition.includes(ingredientId)
+          );
+        }),
+      }))
+    : allCategories;
 
   if (sortBy === "price-asc" || sortBy === "price-desc") {
     categories.forEach((category) => {
