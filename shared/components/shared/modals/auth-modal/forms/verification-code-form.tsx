@@ -2,7 +2,7 @@
 
 import React from "react";
 import toast from "react-hot-toast";
-import { verifyCode } from "@/app/actions";
+import { verifyCode, resendVerificationCode } from "@/app/actions";
 import { Button } from "@/shared/components/ui";
 import { Title } from "../../../title";
 import Image from "next/image";
@@ -17,7 +17,75 @@ interface Props {
 export const VerificationCodeForm: React.FC<Props> = ({ email, onSuccess }) => {
   const [codes, setCodes] = React.useState<string[]>(["", "", "", "", "", ""]);
   const [loading, setLoading] = React.useState(false);
+  const [resendLoading, setResendLoading] = React.useState(false);
+  const [canResend, setCanResend] = React.useState(false);
+  const [countdown, setCountdown] = React.useState(60);
   const inputRefs = React.useRef<(HTMLInputElement | null)[]>([]);
+
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          setCanResend(true);
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    const savedState = localStorage.getItem('verification-state');
+    if (savedState) {
+      try {
+        const { email: savedEmail, timestamp } = JSON.parse(savedState);
+        if (savedEmail === email) {
+          const elapsed = Math.floor((Date.now() - timestamp) / 1000);
+          const remaining = Math.max(0, 60 - elapsed);
+          if (remaining > 0) {
+            setCountdown(remaining);
+            setCanResend(false);
+          } else {
+            setCanResend(true);
+            setCountdown(0);
+          }
+        }
+      } catch (error) {
+        console.error("Error parsing verification state", error);
+      }
+    }
+
+    return () => clearInterval(timer);
+  }, [email]);
+
+  const handleResendCode = async () => {
+    try {
+      setResendLoading(true);
+      await resendVerificationCode(email);
+      toast.success("Код отправлен повторно");
+      setCanResend(false);
+      setCountdown(60);
+      
+      localStorage.setItem('verification-state', JSON.stringify({
+        email,
+        timestamp: Date.now()
+      }));
+
+      const timer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            setCanResend(true);
+            clearInterval(timer);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } catch (error: any) {
+      toast.error(error?.message || "Ошибка при отправке кода");
+    } finally {
+      setResendLoading(false);
+    }
+  };
 
   const handleChange = (index: number, value: string) => {
     if (value.length > 1) {
@@ -67,9 +135,7 @@ export const VerificationCodeForm: React.FC<Props> = ({ email, onSuccess }) => {
     const code = codes.join("");
 
     if (code.length !== 6) {
-      toast.error("Введите полный код из 6 цифр", {
-        icon: "❌",
-      });
+      toast.error("Введите полный код из 6 цифр");
       return;
     }
 
@@ -77,16 +143,12 @@ export const VerificationCodeForm: React.FC<Props> = ({ email, onSuccess }) => {
       setLoading(true);
       await verifyCode(code);
 
-      toast.success("Почта подтверждена", {
-        icon: "✅",
-      });
+      toast.success("Почта подтверждена");
 
       onSuccess?.();
     } catch (error: any) {
       const errorMessage = error?.message || "Ошибка при подтверждении кода";
-      toast.error(errorMessage, {
-        icon: "❌",
-      });
+      toast.error(errorMessage);
       setCodes(["", "", "", "", "", ""]);
       inputRefs.current[0]?.focus();
     } finally {
@@ -159,6 +221,24 @@ export const VerificationCodeForm: React.FC<Props> = ({ email, onSuccess }) => {
       <Button loading={loading} className="h-12 text-base" type="submit">
         Подтвердить
       </Button>
+
+      <div className="text-center">
+        <Button
+          type="button"
+          variant="ghost"
+          onClick={handleResendCode}
+          disabled={!canResend || resendLoading}
+          className="text-sm text-gray-600 hover:text-gray-800"
+        >
+          {resendLoading ? (
+            "Отправляем..."
+          ) : canResend ? (
+            "Отправить код повторно"
+          ) : (
+            `Повторная отправка через ${countdown}с`
+          )}
+        </Button>
+      </div>
     </form>
   );
 };

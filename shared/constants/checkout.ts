@@ -1,5 +1,5 @@
-export const VAT = 15;
-export const DELIVERY_PRICE = 250;
+export const VAT = 20; 
+export const DELIVERY_PRICE = 8; 
 
 export const calculateTotalPrice = (cartAmount: number): number => {
   const vatPrice = (cartAmount * VAT) / 100;

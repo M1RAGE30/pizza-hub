@@ -2,6 +2,7 @@ import { Nunito } from "next/font/google";
 
 import "./globals.css";
 import { Providers } from "@/shared/components/shared/providers";
+import { StartupInitializer } from "@/shared/components/server/startup-initializer";
 
 const nunito = Nunito({
   subsets: ["cyrillic"],
@@ -17,6 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={nunito.className} suppressHydrationWarning>
+        <StartupInitializer />
         <Providers>{children}</Providers>
       </body>
     </html>

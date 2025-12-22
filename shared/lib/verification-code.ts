@@ -1,6 +1,4 @@
 import { prisma } from "@/prisma/prisma-client";
-import { sendEmail } from "./send-email";
-import { VerificationUserTemplate } from "@/shared/components/shared/email-temapltes/verification-user";
 
 export function generateVerificationCode(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
@@ -30,13 +28,16 @@ export async function sendVerificationCode(
   code: string
 ): Promise<void> {
   try {
+    const { sendEmail } = await import("./send-email");
+    const { VerificationUserTemplate } = await import("@/shared/components/shared/email-temapltes/verification-user");
+    
     await sendEmail(
       email,
       "Pizza Hub / 📝 Подтверждение регистрации",
       VerificationUserTemplate({ code })
     );
   } catch (error) {
-    console.log("Error [SEND_VERIFICATION_CODE]", error);
+    console.error("Error [SEND_VERIFICATION_CODE]", error);
   }
 }
 

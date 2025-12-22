@@ -9,12 +9,19 @@ export const useQueryFilters = (filters: Filters) => {
 
   React.useEffect(() => {
     if (isMounted.current) {
-      const params = {
-        ...filters.prices,
+      const params: any = {
         pizzaTypes: Array.from(filters.pizzaTypes),
         sizes: Array.from(filters.sizes),
         ingredients: Array.from(filters.selectedIngredients),
       };
+
+      if (filters.prices.priceFrom) {
+        params.priceFrom = filters.prices.priceFrom;
+      }
+
+      if (filters.prices.priceTo) {
+        params.priceTo = filters.prices.priceTo;
+      }
 
       const query = qs.stringify(params, {
         arrayFormat: "comma",

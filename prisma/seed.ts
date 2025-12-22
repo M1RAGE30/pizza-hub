@@ -3,8 +3,8 @@ import { ingredients, categories, products, productPrices } from "./constants";
 import { prisma } from "./prisma-client";
 import { hashSync } from "bcrypt";
 
-const randomDecimalNumber = (min: number, max: number) => {
-  return Math.floor(Math.random() * (max - min) * 10 + min * 10) / 10;
+const convertToBYN = (rubPrice: number): number => {
+  return Math.round(rubPrice / 30);
 };
 
 const generateProductItem = ({
@@ -20,7 +20,7 @@ const generateProductItem = ({
 }) => {
   return {
     productId,
-    price: price || randomDecimalNumber(190, 600),
+    price: price !== undefined ? convertToBYN(price) : 0,
     pizzaType,
     size,
   } as Prisma.ProductItemUncheckedCreateInput;
@@ -30,16 +30,9 @@ async function up() {
   await prisma.user.createMany({
     data: [
       {
-        fullName: "User Test",
-        email: "user@test.by",
-        password: hashSync("111111", 10),
-        verified: new Date(),
-        role: "USER",
-      },
-      {
-        fullName: "Admin Admin",
-        email: "admin@test.by",
-        password: hashSync("111111", 10),
+        fullName: "Администратор",
+        email: "admin@pizzahub.com",
+        password: hashSync("Admin123456!", 10),
         verified: new Date(),
         role: "ADMIN",
       },
@@ -680,36 +673,12 @@ async function up() {
 
       ...createdProducts.map((product) => {
         const price = productPrices[product.name];
-        return generateProductItem({
+        return {
           productId: product.id,
-          price: price,
-        });
+          price: price, 
+        };
       }),
     ],
-  });
-
-  await prisma.cart.createMany({
-    data: [
-      {
-        totalAmount: 650,
-        token: "11111",
-      },
-      {
-        totalAmount: 0,
-        token: "222222",
-      },
-    ],
-  });
-
-  await prisma.cartItem.create({
-    data: {
-      productItemId: 1,
-      cartId: 1,
-      quantity: 2,
-      ingredients: {
-        connect: [{ id: 1 }, { id: 2 }, { id: 3 }],
-      },
-    },
   });
 
   await prisma.story.createMany({

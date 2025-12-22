@@ -6,13 +6,13 @@ import { Container } from "./container";
 import Image from "next/image";
 import Link from "next/link";
 import { SearchInput } from "./search-input";
-import { CartButton } from "./cart-button";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { ProfileButton } from "./profile-button";
 import { AuthModal } from "./modals/auth-modal";
 import { useSession } from "next-auth/react";
 import { LogoutButton } from "./logout-button";
+import { CartButton } from "./cart-button";
 
 interface Props {
   hasSearch?: boolean;
@@ -46,7 +46,6 @@ export const Header: React.FC<Props> = ({
       setTimeout(() => {
         router.replace("/");
         toast.success(toastMessage, {
-          icon: "✅",
           duration: 3000,
         });
       }, 1000);

@@ -1,5 +1,6 @@
 import React from "react";
 import { WhiteBlock, FormInput } from "../";
+import { FormPhoneInput } from "../form/form-phone-input";
 
 interface Props {
   className?: string;
@@ -16,7 +17,7 @@ export const CheckoutPersonalForm: React.FC<Props> = ({ className }) => {
           placeholder="Фамилия"
         />
         <FormInput name="email" className="text-base" placeholder="E-Mail" />
-        <FormInput name="phone" className="text-base" placeholder="Телефон" />
+        <FormPhoneInput name="phone" className="text-base" placeholder="+375 (XX) XXX-XX-XX" />
       </div>
     </WhiteBlock>
   );

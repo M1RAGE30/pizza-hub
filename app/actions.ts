@@ -1,10 +1,8 @@
 "use server";
 
 import { prisma } from "@/prisma/prisma-client";
-import { PayOrderTemplate } from "@/shared/components";
 import { CheckoutFormValues } from "@/shared/constants";
-import { createPayment } from "@/shared/lib";
-import { sendEmail } from "@/shared/lib/send-email";
+import { createPayment } from "@/shared/lib/create-payment";
 import { getUserSession } from "@/shared/lib/get-user-session";
 import {
   createAndSendVerificationCode,
@@ -46,9 +44,12 @@ export async function createOrder(data: CheckoutFormValues) {
       throw new Error("Cart not found");
     }
 
-    if (!userCart || userCart.totalAmount === 0) {
+    if (userCart?.totalAmount === 0) {
       throw new Error("Cart is empty");
     }
+
+    const { calculateTotalPrice } = await import("@/shared/constants/checkout");
+    const totalPriceWithDeliveryAndTax = calculateTotalPrice(userCart.totalAmount);
 
     const order = await prisma.order.create({
       data: {
@@ -58,7 +59,7 @@ export async function createOrder(data: CheckoutFormValues) {
         phone: data.phone,
         address: data.address,
         comment: data.comment,
-        totalAmount: userCart.totalAmount,
+        totalAmount: totalPriceWithDeliveryAndTax,
         status: OrderStatus.PENDING,
         items: JSON.stringify(userCart.items),
       },
@@ -79,11 +80,8 @@ export async function createOrder(data: CheckoutFormValues) {
       },
     });
 
-    const { calculateTotalPrice } = await import("@/shared/constants/checkout");
-    const totalPriceWithDeliveryAndTax = calculateTotalPrice(userCart.totalAmount);
-
     const paymentData = await createPayment({
-      amount: totalPriceWithDeliveryAndTax,
+      amount: order.totalAmount,
       orderId: order.id,
       description: "Оплата заказа #" + order.id,
     });
@@ -103,20 +101,27 @@ export async function createOrder(data: CheckoutFormValues) {
 
     const paymentUrl = paymentData.confirmation.confirmation_url;
 
-    await sendEmail(
-      data.email,
-      "Pizza Hub / Оплатите заказ #" + order.id,
-      PayOrderTemplate({
-        orderId: order.id,
-        totalAmount: totalPriceWithDeliveryAndTax,
-        cartAmount: userCart.totalAmount,
-        paymentUrl,
-      })
-    );
+    try {
+      const { sendEmail } = await import("@/shared/lib/send-email");
+      const { PayOrderTemplate } = await import("@/shared/components/shared/email-temapltes/pay-order");
+
+      await sendEmail(
+        data.email,
+        "Pizza Hub / Оплатите заказ #" + order.id,
+        PayOrderTemplate({
+          orderId: order.id,
+          totalAmount: order.totalAmount,
+          cartAmount: userCart.totalAmount,
+          paymentUrl,
+        })
+      );
+    } catch (emailError) {
+      console.error("[CreateOrder] Email error (non-critical):", emailError);
+    }
 
     return paymentUrl;
   } catch (err) {
-    console.error("[CreateOrder] Server error", err);
+    console.log("[CreateOrder] Server error", err);
     throw err;
   }
 }

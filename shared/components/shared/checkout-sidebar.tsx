@@ -7,6 +7,7 @@ import {
   calculateTotalPrice,
   calculateVatPrice,
 } from "@/shared/constants/checkout";
+import { formatPrice } from "@/shared/lib/format-price";
 
 interface Props {
   totalAmount: number;
@@ -30,7 +31,7 @@ export const CheckoutSidebar: React.FC<Props> = ({
           <Skeleton className="h-11 w-48" />
         ) : (
           <span className="h-11 text-[34px] font-extrabold">
-            {totalPrice} ₽
+            {formatPrice(totalPrice)} BYN
           </span>
         )}
       </div>
@@ -46,7 +47,7 @@ export const CheckoutSidebar: React.FC<Props> = ({
           loading ? (
             <Skeleton className="h-6 w-16 rounded-[6px]" />
           ) : (
-            `${totalAmount} ₽`
+            `${formatPrice(totalAmount)} BYN`
           )
         }
       />
@@ -61,7 +62,7 @@ export const CheckoutSidebar: React.FC<Props> = ({
           loading ? (
             <Skeleton className="h-6 w-16 rounded-[6px]" />
           ) : (
-            `${vatPrice} ₽`
+            `${formatPrice(vatPrice)} BYN`
           )
         }
       />
@@ -76,7 +77,7 @@ export const CheckoutSidebar: React.FC<Props> = ({
           loading ? (
             <Skeleton className="h-6 w-16 rounded-[6px]" />
           ) : (
-            `${DELIVERY_PRICE} ₽`
+            `${formatPrice(DELIVERY_PRICE)} BYN`
           )
         }
       />

@@ -3,6 +3,7 @@ import React from "react";
 import { Title } from "./title";
 import { Button } from "../ui";
 import { Plus } from "lucide-react";
+import { formatPrice } from "@/shared/lib/format-price";
 
 interface Props {
   id: number;
@@ -10,6 +11,7 @@ interface Props {
   price: number;
   imageUrl: string;
   description?: string | null;
+  categoryId?: number;
   className?: string;
 }
 
@@ -19,8 +21,11 @@ export const ProductCard: React.FC<Props> = ({
   price,
   imageUrl,
   description,
+  categoryId,
   className,
 }) => {
+  const isPizza = categoryId === 1; // Категория пиццы имеет ID = 1
+
   return (
     <div className={`flex flex-col h-full ${className}`}>
       <Link href={`/product/${id}`} className="flex flex-col h-full">
@@ -40,7 +45,7 @@ export const ProductCard: React.FC<Props> = ({
 
         <div className="flex justify-between items-center mt-auto flex-shrink-0">
           <span className="text-[20px]">
-            от <b>{price} ₽</b>
+            {isPizza ? "от " : ""}<b>{formatPrice(price)} BYN</b>
           </span>
 
           <Button variant="secondary" className="text-base font-bold">

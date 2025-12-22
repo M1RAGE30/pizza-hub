@@ -2,6 +2,7 @@ import { cn } from "@/shared/lib/utils";
 import React from "react";
 import { Title } from "./title";
 import { Button } from "../ui";
+import { formatPrice } from "@/shared/lib/format-price";
 
 interface Props {
   imageUrl: string;
@@ -44,7 +45,7 @@ export const ChooseProductForm: React.FC<Props> = ({
           onClick={() => onSubmit?.()}
           className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10"
         >
-          Добавить в корзину за {price} ₽
+          Добавить в корзину за {formatPrice(price)} BYN
         </Button>
       </div>
     </div>

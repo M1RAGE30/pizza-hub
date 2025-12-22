@@ -17,11 +17,12 @@ import Link from "next/link";
 import { Button } from "@/shared/components/ui";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { CartDrawerItem } from "./cart-drawer-item";
-import { getCartItemDetails } from "@/shared/lib";
+import { getCartItemDetails } from "@/shared/lib/get-cart-item-details";
 import { PizzaSize, PizzaType } from "@/shared/constants/pizza";
 import { Title } from "./title";
 import { cn } from "@/shared/lib/utils";
 import { useCart } from "@/shared/hooks";
+import { formatPrice } from "@/shared/lib/format-price";
 
 const getProductWord = (count: number): string => {
   const lastDigit = count % 10;
@@ -147,7 +148,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
                       <div className="flex-1 border-b border-dashed border-b-neutral-200 relative -top-1 mx-2" />
                     </span>
 
-                    <span className="font-bold text-lg">{totalAmount} ₽</span>
+                    <span className="font-bold text-lg">{formatPrice(totalAmount)} BYN</span>
                   </div>
 
                   <Link href="/checkout">

@@ -1,6 +1,6 @@
 import React from "react";
 import { WhiteBlock, CheckoutItem, CheckoutItemSkeleton } from "../../";
-import { getCartItemDetails } from "@/shared/lib";
+import { getCartItemDetails } from "@/shared/lib/get-cart-item-details";
 import { PizzaSize, PizzaType } from "@/shared/constants";
 import { CartStateItem } from "@/shared/lib/get-cart-details";
 

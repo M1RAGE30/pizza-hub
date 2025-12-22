@@ -40,16 +40,21 @@ export const ProductsGroupList: React.FC<Props> = ({
       <Title text={title} size="lg" className="font-extrabold mb-5" />
 
       <div className={cn("grid grid-cols-3 gap-[50px] items-stretch", listClassName)}>
-        {items.map((product, i) => (
-          <ProductCard
-            key={product.id}
-            id={product.id}
-            name={product.name}
-            imageUrl={product.imageUrl}
-            price={product.items[0].price}
-            description={product.description}
-          />
-        ))}
+        {items.map((product, i) => {
+          const prices = product.items.map(item => item.price).filter(price => price > 0);
+          const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
+          return (
+            <ProductCard
+              key={product.id}
+              id={product.id}
+              name={product.name}
+              imageUrl={product.imageUrl}
+              price={minPrice}
+              description={product.description}
+              categoryId={product.categoryId}
+            />
+          );
+        })}
       </div>
     </div>
   );

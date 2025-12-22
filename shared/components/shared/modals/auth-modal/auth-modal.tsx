@@ -11,6 +11,7 @@ import { signIn } from "next-auth/react";
 import React from "react";
 import { LoginForm } from "./forms/login-form";
 import { RegisterForm } from "./forms/register-form";
+import { VerificationCodeForm } from "./forms/verification-code-form";
 
 interface Props {
   open: boolean;
@@ -20,6 +21,43 @@ interface Props {
 export const AuthModal: React.FC<Props> = ({ open, onClose }) => {
   const [type, setType] = React.useState<"login" | "register">("login");
   const [showVerification, setShowVerification] = React.useState(false);
+  const [verificationEmail, setVerificationEmail] = React.useState("");
+
+  React.useEffect(() => {
+    if (open) {
+      const savedVerificationState = localStorage.getItem('verification-state');
+      if (savedVerificationState) {
+        try {
+          const { email, timestamp } = JSON.parse(savedVerificationState);
+          const elapsed = Date.now() - timestamp;
+          if (elapsed < 10 * 60 * 1000) {
+            setShowVerification(true);
+            setVerificationEmail(email);
+          } else {
+            localStorage.removeItem('verification-state');
+          }
+        } catch (error) {
+          localStorage.removeItem('verification-state');
+        }
+      }
+    }
+  }, [open]);
+
+  const handleShowVerification = (email: string) => {
+    setShowVerification(true);
+    setVerificationEmail(email);
+    localStorage.setItem('verification-state', JSON.stringify({
+      email,
+      timestamp: Date.now()
+    }));
+  };
+
+  const handleVerificationSuccess = () => {
+    setShowVerification(false);
+    setVerificationEmail("");
+    setType("login");
+    localStorage.removeItem('verification-state');
+  };
 
   const onSwitchType = () => {
     setType(type === "login" ? "register" : "login");
@@ -27,6 +65,7 @@ export const AuthModal: React.FC<Props> = ({ open, onClose }) => {
 
   const handleClose = () => {
     setShowVerification(false);
+    setVerificationEmail("");
     onClose();
   };
 
@@ -41,15 +80,20 @@ export const AuthModal: React.FC<Props> = ({ open, onClose }) => {
             ? "Введите свою почту и пароль, чтобы войти в свой аккаунт"
             : "Заполните форму для регистрации нового аккаунта"}
         </DialogDescription>
-        {type === "login" ? (
+        {showVerification ? (
+          <VerificationCodeForm
+            email={verificationEmail}
+            onSuccess={handleVerificationSuccess}
+          />
+        ) : type === "login" ? (
           <LoginForm
             onClose={handleClose}
-            onShowVerification={setShowVerification}
+            onShowVerification={handleShowVerification}
           />
         ) : (
           <RegisterForm
             onClose={handleClose}
-            onShowVerification={setShowVerification}
+            onShowVerification={handleShowVerification}
           />
         )}
 

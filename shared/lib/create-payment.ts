@@ -1,5 +1,6 @@
 import { PaymentData } from "@/@types/yookassa";
 import axios from "axios";
+import { convertBYNToRUB } from "./currency-converter";
 
 interface Props {
   description: string;
@@ -8,11 +9,14 @@ interface Props {
 }
 
 export async function createPayment(details: Props) {
+  const rubAmount = convertBYNToRUB(details.amount);
+  const rubAmountRounded = Math.round(rubAmount * 100) / 100; // Округляем до копеек
+  
   const { data } = await axios.post<PaymentData>(
     "https://api.yookassa.ru/v3/payments",
     {
       amount: {
-        value: details.amount.toString(),
+        value: rubAmountRounded.toFixed(2),
         currency: "RUB",
       },
       capture: true,

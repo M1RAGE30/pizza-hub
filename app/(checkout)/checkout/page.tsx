@@ -67,9 +67,7 @@ export default function CheckoutPage() {
 
       const url = await createOrder(data);
 
-      toast.success("Заказ оформлен. Переход на оплату...", {
-        icon: "✅",
-      });
+      toast.success("Заказ оформлен. Переход на оплату...");
 
       if (url) {
         location.href = url;
@@ -77,9 +75,7 @@ export default function CheckoutPage() {
     } catch (err) {
       console.error("Failed to create order:", err);
       setSubmitting(false);
-      toast.error("Не удалось создать заказ", {
-        icon: "❌",
-      });
+      toast.error("Не удалось создать заказ");
     }
   };
 

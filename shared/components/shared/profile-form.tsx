@@ -38,6 +38,7 @@ const getProviderInfo = (provider: string | null) => {
 
 export const ProfileForm: React.FC<Props> = ({ data }) => {
   const isOAuthUser = Boolean(data.provider);
+  const isAdmin = data.role === "ADMIN";
   const providerInfo = getProviderInfo(data.provider);
 
   const form = useForm({
@@ -53,18 +54,14 @@ export const ProfileForm: React.FC<Props> = ({ data }) => {
   const onSubmit = async (formData: TFormRegisterValues) => {
     try {
       await updateUserInfo({
-        email: isOAuthUser ? data.email : formData.email,
-        fullName: formData.fullName,
+        email: isOAuthUser || isAdmin ? data.email : formData.email,
+        fullName: isAdmin ? data.fullName : formData.fullName,
         password: isOAuthUser ? undefined : formData.password,
       });
 
-      toast.success("Данные обновлены", {
-        icon: "✅",
-      });
+      toast.success("Данные обновлены");
     } catch (error) {
-      return toast.error("Ошибка при обновлении данных", {
-        icon: "❌",
-      });
+      return toast.error("Ошибка при обновлении данных");
     }
   };
 
@@ -96,6 +93,11 @@ export const ProfileForm: React.FC<Props> = ({ data }) => {
             </span>
           </div>
         )}
+        {isAdmin && (
+          <div className="flex items-center gap-2 px-4 py-2 rounded-lg border bg-orange-50 text-orange-800">
+            <span className="text-sm font-medium">👑 Администратор</span>
+          </div>
+        )}
       </div>
 
       {isOAuthUser && (
@@ -117,10 +119,16 @@ export const ProfileForm: React.FC<Props> = ({ data }) => {
             name="email"
             label="E-Mail"
             required
-            disabled={isOAuthUser}
-            className={isOAuthUser ? "cursor-not-allowed opacity-60" : ""}
+            disabled={isOAuthUser || isAdmin}
+            className={(isOAuthUser || isAdmin) ? "cursor-not-allowed opacity-60" : ""}
           />
-          <FormInput name="fullName" label="Полное имя" required />
+          <FormInput 
+            name="fullName" 
+            label="Полное имя" 
+            required 
+            disabled={isAdmin}
+            className={isAdmin ? "cursor-not-allowed opacity-60" : ""}
+          />
 
           {!isOAuthUser && (
             <>

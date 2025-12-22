@@ -1,10 +1,4 @@
-import { Container, Header } from "@/shared/components";
-import { Metadata } from "next";
-import { Suspense } from "react";
-
-export const metadata: Metadata = {
-  title: "Pizza Hub | Корзина",
-};
+import { Header } from "@/shared/components";
 
 export default function CheckoutLayout({
   children,
@@ -12,17 +6,9 @@ export default function CheckoutLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="min-h-screen bg-[#F4F1EE]">
-      <Container>
-        <Suspense>
-          <Header
-            hasSearch={false}
-            hasCart={false}
-            className="border-b-gray-200"
-          />
-        </Suspense>
-        {children}
-      </Container>
+    <main className="min-h-screen">
+      <Header hasSearch={false} hasCart={false} />
+      {children}
     </main>
   );
 }

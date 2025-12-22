@@ -21,7 +21,7 @@ export interface Filters {
 }
 
 interface ReturnProps extends Filters {
-  setPrices: (name: keyof PriceProps, value: number) => void;
+  setPrices: (name: keyof PriceProps, value: number | undefined) => void;
   setPizzaTypes: (value: string) => void;
   setSizes: (value: string) => void;
   setSelectedIngredients: (value: string) => void;
@@ -56,7 +56,7 @@ export const useFilters = (): ReturnProps => {
     priceTo: Number(searchParams.get("priceTo")) || undefined,
   });
 
-  const updatePrice = (name: keyof PriceProps, value: number) => {
+  const updatePrice = (name: keyof PriceProps, value: number | undefined) => {
     setPrices((prev) => ({
       ...prev,
       [name]: value,

@@ -1,5 +1,5 @@
 import { CartDTO } from "../services/dto/cart.dto";
-import { calcCartItemTotalPrice } from "./";
+import { calcCartItemTotalPrice } from "./calc-cart-item-total-price";
 import { getIngredientPrice } from "./get-ingredient-price";
 import { PizzaSize } from "../constants/pizza";
 

@@ -9,9 +9,10 @@ import { GroupVariants } from "./group-variants";
 import { PizzaSize, PizzaType, pizzaTypes } from "@/shared/constants/pizza";
 import { IngredientItem } from "./ingredient-item";
 import { cn } from "@/shared/lib/utils";
-import { getPizzaDetails } from "@/shared/lib";
+import { getPizzaDetails } from "@/shared/lib/get-pizza-details";
 import { usePizzaOptions } from "@/shared/hooks";
 import { getIngredientPrice } from "@/shared/lib/get-ingredient-price";
+import { formatPrice } from "@/shared/lib/format-price";
 
 interface Props {
   imageUrl: string;
@@ -125,7 +126,7 @@ export const ChoosePizzaForm: React.FC<Props> = ({
           onClick={handleClickAdd}
           className="h-[55px] px-10 text-base rounded-[18px] w-full mt-10"
         >
-          В корзину за {totalPrice} ₽
+          В корзину за {formatPrice(totalPrice)} BYN
         </Button>
       </div>
     </div>

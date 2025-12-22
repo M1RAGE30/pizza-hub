@@ -8,21 +8,13 @@ import { Button } from "@/shared/components/ui";
 import toast from "react-hot-toast";
 import { signIn } from "next-auth/react";
 import { checkUserAndResendCode } from "@/app/actions";
-import { VerificationCodeForm } from "./verification-code-form";
 
 interface Props {
   onClose?: VoidFunction;
-  onShowVerification?: (show: boolean) => void;
+  onShowVerification?: (email: string) => void;
 }
 
 export const LoginForm: React.FC<Props> = ({ onClose, onShowVerification }) => {
-  const [showVerification, setShowVerification] = React.useState(false);
-  const [userEmail, setUserEmail] = React.useState("");
-
-  React.useEffect(() => {
-    onShowVerification?.(showVerification);
-  }, [showVerification, onShowVerification]);
-
   const form = useForm<TFormLoginValues>({
     resolver: zodResolver(formLoginSchema),
     defaultValues: {
@@ -39,48 +31,24 @@ export const LoginForm: React.FC<Props> = ({ onClose, onShowVerification }) => {
       });
 
       if (resp?.ok) {
-        toast.success("Вы успешно вошли в аккаунт", {
-          icon: "✅",
-        });
+        toast.success("Вы успешно вошли в аккаунт");
         onClose?.();
         return;
       }
 
       try {
         await checkUserAndResendCode(data.email, data.password);
-        setUserEmail(data.email);
-        setShowVerification(true);
-        toast.success("Код подтверждения отправлен на почту", {
-          icon: "✅",
-        });
+        onShowVerification?.(data.email);
+        toast.success("Код подтверждения отправлен на почту");
       } catch (verificationError: any) {
         throw new Error("Неверный email или пароль");
       }
     } catch (error: any) {
       console.error("Error [LOGIN]", error);
       const errorMessage = error?.message || "Не удалось войти в аккаунт";
-      toast.error(errorMessage, {
-        icon: "❌",
-      });
+      toast.error(errorMessage);
     }
   };
-
-  const handleVerificationSuccess = () => {
-    toast.success("Почта подтверждена", {
-      icon: "✅",
-    });
-    setShowVerification(false);
-    form.reset();
-  };
-
-  if (showVerification) {
-    return (
-      <VerificationCodeForm
-        email={userEmail}
-        onSuccess={handleVerificationSuccess}
-      />
-    );
-  }
 
   return (
     <FormProvider {...form}>

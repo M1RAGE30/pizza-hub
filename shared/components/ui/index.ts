@@ -12,10 +12,27 @@ export {
   DialogTitle,
   DialogDescription,
 } from "./dialog";
+export {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "./dropdown-menu";
 export { Drawer } from "./drawer";
 export { Input } from "./input";
 export { Popover, PopoverTrigger, PopoverContent } from "./popover";
-export { Select } from "./select";
+export {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectScrollDownButton,
+  SelectScrollUpButton,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+} from "./select";
 export { Skeleton } from "./skeleton";
 export { Slider } from "./slider";
 export {
@@ -31,3 +48,4 @@ export {
   SheetDescription,
 } from "./sheet";
 export { Textarea } from "./textarea";
+export { Badge } from "./badge";
