@@ -1,5 +1,6 @@
 export { Container } from "./container";
 export { Header } from "./header";
+export { Footer } from "./footer";
 export { ConditionalHeader } from "./conditional-header";
 export { Title } from "./title";
 export { Categories } from "./categories";

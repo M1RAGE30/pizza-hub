@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
-import toast from "react-hot-toast";
 import { ProductWithRelations } from "@/@types/prisma";
 import { useCartStore } from "@/shared/store";
+import React from "react";
+import toast from "react-hot-toast";
 import { ChoosePizzaForm } from "./choose-pizza-form";
 import { ChooseProductForm } from "./choose-product-form";
 
@@ -31,7 +31,7 @@ export const ProductForm: React.FC<Props> = ({
         ingredients,
       });
 
-      toast.success("Товар добавлен в корзину");
+      toast.success(product.name + " добавлен в корзину");
 
       _onSubmit?.();
     } catch (err) {

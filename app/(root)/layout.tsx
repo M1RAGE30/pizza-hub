@@ -1,4 +1,5 @@
 import { ConditionalHeader } from "@/shared/components/shared/conditional-header";
+import { Footer } from "@/shared/components/shared/footer";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
@@ -14,12 +15,13 @@ export default function HomeLayout({
   modal: React.ReactNode;
 }>) {
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen flex flex-col">
       <Suspense>
         <ConditionalHeader />
       </Suspense>
-      {children}
+      <div className="flex-1">{children}</div>
       {modal}
+      <Footer />
     </main>
   );
 }

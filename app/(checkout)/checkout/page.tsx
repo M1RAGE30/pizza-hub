@@ -37,11 +37,15 @@ export default function CheckoutPage() {
     },
   });
 
+  const formInitialized = React.useRef(false);
+
   React.useEffect(() => {
     async function fetchUserInfo() {
+      if (formInitialized.current) return;
+
       try {
         const data = await Api.auth.getMe();
-        
+
         if (!data || !data.fullName) {
           return;
         }
@@ -51,6 +55,7 @@ export default function CheckoutPage() {
         form.setValue("firstName", firstName || "");
         form.setValue("lastName", lastName || "");
         form.setValue("email", data.email || "");
+        formInitialized.current = true;
       } catch (error) {
         console.error("Failed to fetch user info:", error);
       }

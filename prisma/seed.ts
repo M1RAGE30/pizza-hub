@@ -3,10 +3,6 @@ import { ingredients, categories, products, productPrices } from "./constants";
 import { prisma } from "./prisma-client";
 import { hashSync } from "bcrypt";
 
-const convertToBYN = (rubPrice: number): number => {
-  return Math.round(rubPrice / 30);
-};
-
 const generateProductItem = ({
   productId,
   pizzaType,
@@ -15,12 +11,12 @@ const generateProductItem = ({
 }: {
   productId: number;
   pizzaType?: 1 | 2;
-  size?: 20 | 25 | 30 | 35;
+  size?: 25 | 30 | 35;
   price?: number;
 }) => {
   return {
     productId,
-    price: price !== undefined ? convertToBYN(price) : 0,
+    price: price !== undefined ? price : 0,
     pizzaType,
     size,
   } as Prisma.ProductItemUncheckedCreateInput;
@@ -117,9 +113,9 @@ async function up() {
 
   const pizza3 = await prisma.product.create({
     data: {
-      name: "Пепперони фреш",
+      name: "Пепперони",
       imageUrl:
-        "https://media.dodostatic.net/image/r:233x233/0198bf57bc517218ab93c762f4b0193e.avif",
+        "https://media.dodostatic.net/image/r:233x233/019ac20b311478aca7173b34234cfe4f.avif",
       description:
         "Пикантная пепперони, увеличенная порция моцареллы, томаты, фирменный томатный соус",
       categoryId: 1,
@@ -136,9 +132,9 @@ async function up() {
 
   const pizza4 = await prisma.product.create({
     data: {
-      name: "Чесночный цыпленок",
+      name: "Охотничья",
       imageUrl:
-        "https://media.dodostatic.net/image/r:233x233/0198bf24170179679a7872f2ddf16d18.avif",
+        "https://media.dodostatic.net/image/r:233x233/019ac6610d1b76c8a62062f6a5931fef.avif",
       description:
         "Цыпленок, чеснок, томаты, моцарелла, фирменный соус альфредо",
       categoryId: 1,
@@ -309,452 +305,380 @@ async function up() {
       generateProductItem({
         productId: pizza1.id,
         pizzaType: 1,
-        size: 20,
-        price: 479,
-      }),
-      generateProductItem({
-        productId: pizza1.id,
-        pizzaType: 1,
         size: 25,
-        price: 609,
+        price: 18.9,
       }),
       generateProductItem({
         productId: pizza1.id,
         pizzaType: 1,
         size: 30,
-        price: 839,
+        price: 27.9,
       }),
       generateProductItem({
         productId: pizza1.id,
         pizzaType: 2,
         size: 30,
-        price: 839,
+        price: 27.9,
       }),
       generateProductItem({
         productId: pizza1.id,
         pizzaType: 1,
         size: 35,
-        price: 999,
+        price: 33.9,
       }),
       generateProductItem({
         productId: pizza1.id,
         pizzaType: 2,
         size: 35,
-        price: 999,
+        price: 33.9,
       }),
 
       generateProductItem({
         productId: pizza2.id,
         pizzaType: 1,
-        size: 20,
-        price: 539,
-      }),
-      generateProductItem({
-        productId: pizza2.id,
-        pizzaType: 1,
         size: 25,
-        price: 679,
+        price: 26.9,
       }),
       generateProductItem({
         productId: pizza2.id,
         pizzaType: 1,
         size: 30,
-        price: 929,
+        price: 34.9,
       }),
       generateProductItem({
         productId: pizza2.id,
         pizzaType: 2,
         size: 30,
-        price: 929,
+        price: 34.9,
       }),
       generateProductItem({
         productId: pizza2.id,
         pizzaType: 1,
         size: 35,
-        price: 1099,
+        price: 40.9,
       }),
       generateProductItem({
         productId: pizza2.id,
         pizzaType: 2,
         size: 35,
-        price: 1099,
+        price: 40.9,
       }),
 
       generateProductItem({
         productId: pizza3.id,
         pizzaType: 1,
-        size: 20,
-        price: 289,
-      }),
-      generateProductItem({
-        productId: pizza3.id,
-        pizzaType: 1,
         size: 25,
-        price: 369,
+        price: 18.9,
       }),
       generateProductItem({
         productId: pizza3.id,
         pizzaType: 1,
         size: 30,
-        price: 629,
+        price: 27.9,
       }),
       generateProductItem({
         productId: pizza3.id,
         pizzaType: 2,
         size: 30,
-        price: 629,
+        price: 27.9,
       }),
       generateProductItem({
         productId: pizza3.id,
         pizzaType: 1,
         size: 35,
-        price: 749,
+        price: 33.9,
       }),
       generateProductItem({
         productId: pizza3.id,
         pizzaType: 2,
         size: 35,
-        price: 749,
+        price: 33.9,
       }),
 
       generateProductItem({
         productId: pizza4.id,
         pizzaType: 1,
-        size: 20,
-        price: 289,
-      }),
-      generateProductItem({
-        productId: pizza4.id,
-        pizzaType: 1,
         size: 25,
-        price: 369,
+        price: 22.9,
       }),
       generateProductItem({
         productId: pizza4.id,
         pizzaType: 1,
         size: 30,
-        price: 629,
+        price: 30.9,
       }),
       generateProductItem({
         productId: pizza4.id,
         pizzaType: 2,
         size: 30,
-        price: 629,
+        price: 30.9,
       }),
       generateProductItem({
         productId: pizza4.id,
         pizzaType: 1,
         size: 35,
-        price: 749,
+        price: 36.9,
       }),
       generateProductItem({
         productId: pizza4.id,
         pizzaType: 2,
         size: 35,
-        price: 749,
+        price: 36.9,
       }),
 
       generateProductItem({
         productId: pizza5.id,
         pizzaType: 1,
-        size: 20,
-        price: 379,
-      }),
-      generateProductItem({
-        productId: pizza5.id,
-        pizzaType: 1,
         size: 25,
-        price: 479,
+        price: 22.9,
       }),
       generateProductItem({
         productId: pizza5.id,
         pizzaType: 1,
         size: 30,
-        price: 719,
+        price: 30.9,
       }),
       generateProductItem({
         productId: pizza5.id,
         pizzaType: 2,
         size: 30,
-        price: 719,
+        price: 30.9,
       }),
       generateProductItem({
         productId: pizza5.id,
         pizzaType: 1,
         size: 35,
-        price: 859,
+        price: 36.9,
       }),
       generateProductItem({
         productId: pizza5.id,
         pizzaType: 2,
         size: 35,
-        price: 859,
+        price: 36.9,
       }),
 
       generateProductItem({
         productId: pizza6.id,
         pizzaType: 1,
-        size: 20,
-        price: 399,
-      }),
-      generateProductItem({
-        productId: pizza6.id,
-        pizzaType: 1,
         size: 25,
-        price: 499,
+        price: 24.9,
       }),
       generateProductItem({
         productId: pizza6.id,
         pizzaType: 1,
         size: 30,
-        price: 749,
+        price: 32.9,
       }),
       generateProductItem({
         productId: pizza6.id,
         pizzaType: 2,
         size: 30,
-        price: 749,
+        price: 32.9,
       }),
       generateProductItem({
         productId: pizza6.id,
         pizzaType: 1,
         size: 35,
-        price: 899,
+        price: 39.9,
       }),
       generateProductItem({
         productId: pizza6.id,
         pizzaType: 2,
         size: 35,
-        price: 899,
+        price: 39.9,
       }),
 
       generateProductItem({
         productId: pizza7.id,
         pizzaType: 1,
-        size: 20,
-        price: 289,
-      }),
-      generateProductItem({
-        productId: pizza7.id,
-        pizzaType: 1,
         size: 25,
-        price: 369,
+        price: 8.9,
       }),
       generateProductItem({
         productId: pizza7.id,
         pizzaType: 1,
         size: 30,
-        price: 629,
+        price: 16.9,
       }),
       generateProductItem({
         productId: pizza7.id,
         pizzaType: 2,
         size: 30,
-        price: 629,
+        price: 16.9,
       }),
       generateProductItem({
         productId: pizza7.id,
         pizzaType: 1,
         size: 35,
-        price: 749,
+        price: 23.9,
       }),
       generateProductItem({
         productId: pizza7.id,
         pizzaType: 2,
         size: 35,
-        price: 749,
+        price: 23.9,
       }),
 
       generateProductItem({
         productId: pizza8.id,
         pizzaType: 1,
-        size: 20,
-        price: 289,
-      }),
-      generateProductItem({
-        productId: pizza8.id,
-        pizzaType: 1,
         size: 25,
-        price: 369,
+        price: 18.9,
       }),
       generateProductItem({
         productId: pizza8.id,
         pizzaType: 1,
         size: 30,
-        price: 629,
+        price: 27.9,
       }),
       generateProductItem({
         productId: pizza8.id,
         pizzaType: 2,
         size: 30,
-        price: 629,
+        price: 27.9,
       }),
       generateProductItem({
         productId: pizza8.id,
         pizzaType: 1,
         size: 35,
-        price: 749,
+        price: 33.9,
       }),
       generateProductItem({
         productId: pizza8.id,
         pizzaType: 2,
         size: 35,
-        price: 749,
+        price: 33.9,
       }),
 
       generateProductItem({
         productId: pizza9.id,
         pizzaType: 1,
-        size: 20,
-        price: 339,
-      }),
-      generateProductItem({
-        productId: pizza9.id,
-        pizzaType: 1,
         size: 25,
-        price: 429,
+        price: 15.9,
       }),
       generateProductItem({
         productId: pizza9.id,
         pizzaType: 1,
         size: 30,
-        price: 679,
+        price: 23.9,
       }),
       generateProductItem({
         productId: pizza9.id,
         pizzaType: 2,
         size: 30,
-        price: 679,
+        price: 23.9,
       }),
       generateProductItem({
         productId: pizza9.id,
         pizzaType: 1,
         size: 35,
-        price: 799,
+        price: 30.9,
       }),
       generateProductItem({
         productId: pizza9.id,
         pizzaType: 2,
         size: 35,
-        price: 799,
+        price: 30.9,
       }),
 
       generateProductItem({
         productId: pizza10.id,
         pizzaType: 1,
-        size: 20,
-        price: 349,
-      }),
-      generateProductItem({
-        productId: pizza10.id,
-        pizzaType: 1,
         size: 25,
-        price: 439,
+        price: 18.9,
       }),
       generateProductItem({
         productId: pizza10.id,
         pizzaType: 1,
         size: 30,
-        price: 689,
+        price: 27.9,
       }),
       generateProductItem({
         productId: pizza10.id,
         pizzaType: 2,
         size: 30,
-        price: 689,
+        price: 27.9,
       }),
       generateProductItem({
         productId: pizza10.id,
         pizzaType: 1,
         size: 35,
-        price: 809,
+        price: 33.9,
       }),
       generateProductItem({
         productId: pizza10.id,
         pizzaType: 2,
         size: 35,
-        price: 809,
+        price: 33.9,
       }),
 
       generateProductItem({
         productId: pizza11.id,
         pizzaType: 1,
-        size: 20,
-        price: 519,
-      }),
-      generateProductItem({
-        productId: pizza11.id,
-        pizzaType: 1,
         size: 25,
-        price: 649,
+        price: 26.9,
       }),
       generateProductItem({
         productId: pizza11.id,
         pizzaType: 1,
         size: 30,
-        price: 929,
+        price: 34.9,
       }),
       generateProductItem({
         productId: pizza11.id,
         pizzaType: 2,
         size: 30,
-        price: 929,
+        price: 34.9,
       }),
       generateProductItem({
         productId: pizza11.id,
         pizzaType: 1,
         size: 35,
-        price: 1099,
+        price: 40.9,
       }),
       generateProductItem({
         productId: pizza11.id,
         pizzaType: 2,
         size: 35,
-        price: 1099,
+        price: 40.9,
       }),
 
       generateProductItem({
         productId: pizza12.id,
         pizzaType: 1,
-        size: 20,
-        price: 399,
-      }),
-      generateProductItem({
-        productId: pizza12.id,
-        pizzaType: 1,
         size: 25,
-        price: 499,
+        price: 24.9,
       }),
       generateProductItem({
         productId: pizza12.id,
         pizzaType: 1,
         size: 30,
-        price: 749,
+        price: 32.9,
       }),
       generateProductItem({
         productId: pizza12.id,
         pizzaType: 2,
         size: 30,
-        price: 749,
+        price: 32.9,
       }),
       generateProductItem({
         productId: pizza12.id,
         pizzaType: 1,
         size: 35,
-        price: 899,
+        price: 39.9,
       }),
       generateProductItem({
         productId: pizza12.id,
         pizzaType: 2,
         size: 35,
-        price: 899,
+        price: 39.9,
       }),
 
       ...createdProducts.map((product) => {
         const price = productPrices[product.name];
         return {
           productId: product.id,
-          price: price, 
+          price: price,
         };
       }),
     ],

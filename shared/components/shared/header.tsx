@@ -32,25 +32,25 @@ export const Header: React.FC<Props> = ({
   const searchParams = useSearchParams();
 
   React.useEffect(() => {
-    let toastMessage = "";
-
     if (searchParams.has("paid")) {
-      toastMessage = "Заказ оплачен";
+      setTimeout(() => {
+        router.replace("/");
+        toast.success("Спасибо за заказ! Проверьте почту для подтверждения.", {
+          duration: 3000,
+        });
+      }, 1000);
+      return;
     }
 
     if (searchParams.has("verified")) {
-      toastMessage = "Почта подтверждена";
-    }
-
-    if (toastMessage) {
       setTimeout(() => {
         router.replace("/");
-        toast.success(toastMessage, {
+        toast.success("Почта подтверждена", {
           duration: 3000,
         });
       }, 1000);
     }
-  }, []);
+  }, [router, searchParams]);
 
   return (
     <header className={cn("border-b", className)}>

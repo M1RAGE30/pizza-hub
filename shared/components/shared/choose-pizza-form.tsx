@@ -104,6 +104,14 @@ export const ChoosePizzaForm: React.FC<Props> = ({
                 if (ingredient.name === "Сырный бортик") {
                   return canAddCheeseBord;
                 }
+                if (
+                  ingredient.name === "Пряная говядина" ||
+                  ingredient.name === "Баварские колбаски" ||
+                  ingredient.name === "Креветки" ||
+                  ingredient.name === "Свиная шейка"
+                ) {
+                  return false;
+                }
                 return true;
               })
               .map((ingredient) => {

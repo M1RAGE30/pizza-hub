@@ -15,21 +15,31 @@ export const Filters: React.FC<Props> = ({ className }) => {
 
   useQueryFilters(filters);
 
-  const items = ingredients.map((item) => ({
-    value: String(item.id),
-    text: item.name,
-  }));
+  const excludedIngredients = [
+    "Сырный бортик",
+    "Пряная говядина",
+    "Баварские колбаски",
+    "Креветки",
+    "Свиная шейка",
+  ];
+
+  const items = ingredients
+    .filter((item) => !excludedIngredients.includes(item.name))
+    .map((item) => ({
+      value: String(item.id),
+      text: item.name,
+    }));
 
   const updatePrices = (prices: number[]) => {
     const [priceFrom, priceTo] = prices;
-    
+
     if (priceFrom > 0) {
       filters.setPrices("priceFrom", priceFrom);
     } else {
       filters.setPrices("priceFrom", undefined);
     }
-    
-    if (priceTo < 100) {
+
+    if (priceTo < 50) {
       filters.setPrices("priceTo", priceTo);
     } else {
       filters.setPrices("priceTo", undefined);
@@ -59,7 +69,6 @@ export const Filters: React.FC<Props> = ({ className }) => {
         onClickCheckbox={filters.setSizes}
         selected={filters.sizes}
         items={[
-          { text: "20 см", value: "20" },
           { text: "25 см", value: "25" },
           { text: "30 см", value: "30" },
           { text: "35 см", value: "35" },
@@ -73,7 +82,7 @@ export const Filters: React.FC<Props> = ({ className }) => {
             type="number"
             placeholder="0"
             min={0}
-            max={100}
+            max={50}
             value={String(filters.prices.priceFrom ?? 0)}
             onChange={(e) =>
               filters.setPrices("priceFrom", Number(e.target.value))
@@ -82,9 +91,9 @@ export const Filters: React.FC<Props> = ({ className }) => {
           <Input
             type="number"
             min={5}
-            max={100}
-            placeholder="100"
-            value={String(filters.prices.priceTo ?? 100)}
+            max={50}
+            placeholder="50"
+            value={String(filters.prices.priceTo ?? 50)}
             onChange={(e) =>
               filters.setPrices("priceTo", Number(e.target.value))
             }
@@ -93,12 +102,9 @@ export const Filters: React.FC<Props> = ({ className }) => {
 
         <RangeSlider
           min={0}
-          max={100}
+          max={50}
           step={1}
-          value={[
-            filters.prices.priceFrom || 0,
-            filters.prices.priceTo || 100,
-          ]}
+          value={[filters.prices.priceFrom || 0, filters.prices.priceTo || 50]}
           onValueChange={updatePrices}
         />
       </div>

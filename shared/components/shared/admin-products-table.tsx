@@ -122,9 +122,7 @@ export const AdminProductsTable: React.FC = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <Badge variant="secondary">
-                      {product.category.name}
-                    </Badge>
+                    <Badge variant="secondary">{product.category.name}</Badge>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">
@@ -133,7 +131,13 @@ export const AdminProductsTable: React.FC = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">
-                      от {formatPrice(Math.min(...product.items.map((item: any) => item.price)))} BYN
+                      {product.items.length > 1 ? "от " : ""}
+                      {formatPrice(
+                        Math.min(
+                          ...product.items.map((item: any) => item.price)
+                        )
+                      )}{" "}
+                      BYN
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">

@@ -1,155 +1,39 @@
 import { Ingredient } from "@prisma/client";
 import { PizzaSize } from "../constants/pizza";
 
-const convertToBYN = (rubPrice: number): number => {
-  return Math.round(rubPrice / 30);
-};
-
 export const getIngredientPrice = (
   ingredient: Ingredient,
   size: PizzaSize
 ): number => {
-  const basePrice = ingredient.price;
-
   const sizeBasedPrices: Record<string, Record<PizzaSize, number>> = {
-    "Пряная говядина": {
-      20: convertToBYN(59),
-      25: convertToBYN(99),
-      30: convertToBYN(119),
-      35: convertToBYN(155),
-    },
-    Моцарелла: {
-      20: convertToBYN(55),
-      25: convertToBYN(79),
-      30: convertToBYN(90),
-      35: convertToBYN(115),
-    },
-    "Сыры чеддер и пармезан": {
-      20: convertToBYN(49),
-      25: convertToBYN(69),
-      30: convertToBYN(79),
-      35: convertToBYN(99),
-    },
-    "Сыр блю чиз": {
-      20: convertToBYN(59),
-      25: convertToBYN(99),
-      30: convertToBYN(149),
-      35: convertToBYN(199),
-    },
-    "Острый перец халапеньо": {
-      20: convertToBYN(39),
-      25: convertToBYN(49),
-      30: convertToBYN(59),
-      35: convertToBYN(79),
-    },
-    "Нежный цыпленок": {
-      20: convertToBYN(49),
-      25: convertToBYN(69),
-      30: convertToBYN(79),
-      35: convertToBYN(99),
-    },
-    Шампиньоны: {
-      20: convertToBYN(39),
-      25: convertToBYN(49),
-      30: convertToBYN(59),
-      35: convertToBYN(79),
-    },
-    Бекон: {
-      20: convertToBYN(49),
-      25: convertToBYN(69),
-      30: convertToBYN(79),
-      35: convertToBYN(99),
-    },
-    Ветчина: {
-      20: convertToBYN(49),
-      25: convertToBYN(79),
-      30: convertToBYN(79),
-      35: convertToBYN(99),
-    },
-    "Пикантная пепперони": {
-      20: convertToBYN(59),
-      25: convertToBYN(69),
-      30: convertToBYN(79),
-      35: convertToBYN(99),
-    },
-    "Острая чоризо": {
-      20: convertToBYN(49),
-      25: convertToBYN(69),
-      30: convertToBYN(79),
-      35: convertToBYN(99),
-    },
-    "Маринованные огурчики": {
-      20: convertToBYN(39),
-      25: convertToBYN(49),
-      30: convertToBYN(59),
-      35: convertToBYN(79),
-    },
-    "Свежие томаты": {
-      20: convertToBYN(39),
-      25: convertToBYN(49),
-      30: convertToBYN(59),
-      35: convertToBYN(79),
-    },
-    "Красный лук": {
-      20: convertToBYN(39),
-      25: convertToBYN(49),
-      30: convertToBYN(59),
-      35: convertToBYN(79),
-    },
-    "Сочные ананасы": {
-      20: convertToBYN(39),
-      25: convertToBYN(59),
-      30: convertToBYN(79),
-      35: convertToBYN(79),
-    },
-    "Итальянские травы": {
-      20: convertToBYN(19),
-      25: convertToBYN(29),
-      30: convertToBYN(39),
-      35: convertToBYN(59),
-    },
-    "Сладкий перец": {
-      20: convertToBYN(39),
-      25: convertToBYN(49),
-      30: convertToBYN(59),
-      35: convertToBYN(79),
-    },
-    "Кубики брынзы": {
-      20: convertToBYN(49),
-      25: convertToBYN(69),
-      30: convertToBYN(79),
-      35: convertToBYN(99),
-    },
-    "Баварские колбаски": {
-      20: convertToBYN(59),
-      25: convertToBYN(119),
-      30: convertToBYN(129),
-      35: convertToBYN(159),
-    },
-    Креветки: {
-      20: convertToBYN(115),
-      25: convertToBYN(205),
-      30: convertToBYN(229),
-      35: convertToBYN(250),
-    },
-    "Свиная шейка": {
-      20: convertToBYN(115),
-      25: convertToBYN(205),
-      30: convertToBYN(229),
-      35: convertToBYN(250),
-    },
-    "Сырный бортик": {
-      20: 0,
-      25: 0,
-      30: convertToBYN(205),
-      35: convertToBYN(229),
-    },
+    "Сырный бортик": { 25: 0, 30: 5.5, 35: 5.9 },
+    "Пряная говядина": { 25: 3.5, 30: 4.0, 35: 5.0 },
+    Моцарелла: { 25: 3.0, 30: 3.5, 35: 5.0 },
+    "Сыры чеддер и пармезан": { 25: 3.0, 30: 3.5, 35: 4.0 },
+    "Сыр блю чиз": { 25: 3.0, 30: 3.5, 35: 5.0 },
+    "Острый перец халапеньо": { 25: 2.0, 30: 2.5, 35: 3.0 },
+    "Нежный цыпленок": { 25: 2.5, 30: 3.0, 35: 3.5 },
+    Шампиньоны: { 25: 2.0, 30: 2.5, 35: 3.0 },
+    Бекон: { 25: 3.0, 30: 3.5, 35: 4.0 },
+    Ветчина: { 25: 2.5, 30: 3.0, 35: 3.5 },
+    "Пикантная пепперони": { 25: 2.5, 30: 3.0, 35: 3.5 },
+    "Острая чоризо": { 25: 2.5, 30: 3.0, 35: 3.5 },
+    "Маринованные огурчики": { 25: 2.0, 30: 2.5, 35: 3.0 },
+    "Свежие томаты": { 25: 2.5, 30: 3.0, 35: 3.5 },
+    "Красный лук": { 25: 2.0, 30: 2.5, 35: 3.0 },
+    "Сочные ананасы": { 25: 2.5, 30: 3.0, 35: 3.5 },
+    "Итальянские травы": { 25: 2.0, 30: 2.5, 35: 3.0 },
+    "Сладкий перец": { 25: 1.99, 30: 2.49, 35: 2.99 },
+    "Кубики брынзы": { 25: 2.5, 30: 3.0, 35: 3.5 },
+    "Баварские колбаски": { 25: 4.0, 30: 4.5, 35: 5.5 },
+    Креветки: { 25: 7.0, 30: 8.0, 35: 9.0 },
+    "Свиная шейка": { 25: 7.0, 30: 8.0, 35: 9.0 },
   };
 
   const sizePrices = sizeBasedPrices[ingredient.name];
   if (sizePrices) {
-    return sizePrices[size] || basePrice;
+    return sizePrices[size];
   }
 
-  return basePrice;
+  return ingredient.price;
 };

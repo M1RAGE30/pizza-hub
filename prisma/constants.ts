@@ -1,151 +1,141 @@
 export const categories = [
-  {
-    name: "Пиццы",
-  },
-  {
-    name: "Завтрак",
-  },
-  {
-    name: "Закуски",
-  },
-  {
-    name: "Коктейли",
-  },
-  {
-    name: "Кофе",
-  },
+  { name: "Пиццы" },
+  { name: "Завтрак" },
+  { name: "Закуски" },
+  { name: "Коктейли" },
+  { name: "Кофе" },
 ];
 
 export const ingredients = [
   {
     name: "Сырный бортик",
-    price: 3,
+    price: 9.9,
     imageUrl:
       "https://cdn.dodostatic.net/static/Img/Ingredients/99f5cb91225b4875bd06a26d2e842106.png",
   },
   {
     name: "Пряная говядина",
-    price: 2,
+    price: 6.6,
     imageUrl:
       "https://cdn.dodostatic.net/static/Img/Ingredients/01991530635b73ecb1a22658b49e1653.png",
   },
   {
     name: "Моцарелла",
-    price: 1,
+    price: 3.0,
     imageUrl:
       "https://cdn.dodostatic.net/static/Img/Ingredients/0199ae74f2fd783b8fb21bb0af7d09e6.png",
   },
   {
     name: "Сыры чеддер и пармезан",
-    price: 1,
+    price: 3.0,
     imageUrl:
       "https://cdn.dodostatic.net/static/Img/Ingredients/0199152f32e47035aefbe8c971c54502.png",
   },
   {
     name: "Сыр блю чиз",
-    price: 1,
+    price: 3.3,
     imageUrl:
       "https://cdn.dodostatic.net/static/Img/Ingredients/0199153050ea707cbed48b92097e095f.png",
   },
   {
     name: "Острый перец халапеньо",
-    price: 1,
+    price: 2.0,
     imageUrl:
       "https://cdn.dodostatic.net/static/Img/Ingredients/0199152c7eb27553a08f57c8c9861ac3.png",
   },
   {
     name: "Нежный цыпленок",
-    price: 1,
+    price: 2.5,
     imageUrl:
       "https://cdn.dodostatic.net/static/Img/Ingredients/0199152e59157089adb89948280ebb10.png",
   },
   {
     name: "Шампиньоны",
-    price: 1,
+    price: 2.0,
     imageUrl:
       "https://cdn.dodostatic.net/static/Img/Ingredients/0199152bfda5723f8bbecc43a35f83f1.png",
   },
   {
     name: "Бекон",
-    price: 1,
+    price: 3.0,
     imageUrl:
       "https://cdn.dodostatic.net/static/Img/Ingredients/0199ae744508792995ccae4ff71e233e.png",
   },
   {
     name: "Ветчина",
-    price: 1,
+    price: 2.5,
     imageUrl:
       "https://cdn.dodostatic.net/static/Img/Ingredients/0199152d7fd075a9b11d17f8acaf1670.png",
   },
   {
     name: "Пикантная пепперони",
-    price: 1,
+    price: 2.5,
     imageUrl:
       "https://cdn.dodostatic.net/static/Img/Ingredients/0199152b6e6978a188ec97d9bd52e7d2.png",
   },
   {
     name: "Острая чоризо",
-    price: 1,
+    price: 2.5,
     imageUrl:
       "https://cdn.dodostatic.net/static/Img/Ingredients/0199ae74b6d6761f972e9a60b63044bc.png",
   },
   {
     name: "Маринованные огурчики",
-    price: 1,
+    price: 2.0,
     imageUrl:
       "https://cdn.dodostatic.net/static/Img/Ingredients/0199152e33ee7722ac038fa5bc26e630.png",
   },
   {
     name: "Свежие томаты",
-    price: 1,
+    price: 2.5,
     imageUrl:
       "https://cdn.dodostatic.net/static/Img/Ingredients/0199152a8428737d9f6b19c1b2329749.png",
   },
   {
     name: "Красный лук",
-    price: 1,
+    price: 2.0,
     imageUrl:
       "https://cdn.dodostatic.net/static/Img/Ingredients/0199ae747c85710abcf2950497834b01.png",
   },
   {
     name: "Сочные ананасы",
-    price: 1,
+    price: 2.5,
     imageUrl:
       "https://cdn.dodostatic.net/static/Img/Ingredients/0199152b81587495b19ba8008c567f5d.png",
   },
   {
     name: "Итальянские травы",
-    price: 1,
+    price: 2.0,
     imageUrl:
       "https://cdn.dodostatic.net/static/Img/Ingredients/0199152ced7677fcb0e49edd0ebf6c90.png",
   },
   {
     name: "Сладкий перец",
-    price: 1,
+    price: 1.99,
     imageUrl:
       "https://cdn.dodostatic.net/static/Img/Ingredients/0199152da27677a7a24a41b4eddfcedd.png",
   },
   {
     name: "Кубики брынзы",
-    price: 1,
+    price: 2.5,
     imageUrl:
       "https://cdn.dodostatic.net/static/Img/Ingredients/0199152a464a781abbc1d135f7d138aa.png",
   },
   {
     name: "Баварские колбаски",
-    price: 1,
+    price: 3.3,
     imageUrl:
       "https://cdn.dodostatic.net/static/Img/Ingredients/019915307407729e970fee55536f6dca.png",
   },
   {
     name: "Креветки",
-    price: 2,
+    price: 6.6,
     imageUrl:
       "https://cdn.dodostatic.net/static/Img/Ingredients/0199152abd577969bb76a8123d1a7ea1.png",
   },
   {
     name: "Свиная шейка",
-    price: 2,
+    price: 6.6,
     imageUrl:
       "https://cdn.dodostatic.net/static/Img/Ingredients/0199e7d1cd977499a410e7a4f0495221.png",
   },
@@ -331,11 +321,11 @@ export const products = [
     categoryId: 5,
   },
   {
-    name: "Ланчбокс с хреном",
+    name: "Ланчбокс Охотничий",
     imageUrl:
-      "https://media.dodostatic.net/image/r:233x233/0198bf046b9577f78d909cfe8e772264.avif",
+      "https://media.dodostatic.net/image/r:292x292/019ac22c1b8a700081d1ef82424d93c3.avif",
     description:
-      "Это блюдо с ярким характером: дерзкий сливочный соус с хреном, свиная шейка и маринованные огурчики с картошкой по-деревенски",
+      "Горячий обед с охотничьими колбасками, картофелем фри, соусом барбекю, свежими овощами и сыром",
     categoryId: 3,
   },
   {
@@ -347,11 +337,11 @@ export const products = [
     categoryId: 3,
   },
   {
-    name: "Холодный чикен ролл",
+    name: "Додстер Терияки",
     imageUrl:
-      "https://media.dodostatic.net/image/r:233x233/01980e8a432071ca863e03212730c399.avif",
+      "https://media.dodostatic.net/image/r:292x292/01989b60fddb7347b5b20194de4e3e3c.avif",
     description:
-      "Холодная закуска для легкого перекуса: ролл с цыпленком, свежим салатом, томатами, чеддером и пармезаном с соусом ранч",
+      "Горячая закуска с цыпленком терияки, свежим салатом, томатами, чеддером и пармезаном с соусом терияки",
     categoryId: 3,
   },
   {
@@ -397,35 +387,35 @@ export const products = [
 ];
 
 export const productPrices: Record<string, number> = {
-  "Омлет с ветчиной и грибами в пите": 8,
-  "Омлет с пепперони в пите": 8,
-  "Омлет сырный в пите": 8,
-  "Омлет с томатами": 5,
-  "Омлет с беконом": 7,
-  "Омлет с ветчиной и грибами": 7,
-  "Омлет с пепперони": 7,
-  "Омлет сырный": 7,
-  Сырники: 6,
-  "Персиковый молочный коктейль": 9,
-  "Молочный коктейль Фисташка": 9,
-  "Молочный коктейль с печеньем Орео": 9,
-  "Классический молочный коктейль": 8,
-  "Клубничный молочный коктейль": 9,
-  "Шоколадный молочный коктейль": 9,
-  "Кофе Американо": 4,
-  "Латте Темный лес": 6,
-  "Кофе Капучино": 6,
-  "Кофе Латте": 6,
-  "Кофе Карамельный капучино": 6,
-  "Кофе Кокосовый латте": 6,
-  "Кофе Ореховый латте": 6,
-  "Айс капучино": 9,
-  "Ланчбокс с хреном": 12,
-  "Паста Мясная": 15,
-  "Холодный чикен ролл": 8,
-  Додстер: 8,
-  "Додстер Чилл Грилл": 9,
-  "Супермясной Додстер": 10,
-  "Додстер с ветчиной": 8,
-  "Острый Додстер": 9,
+  "Омлет с пепперони в пите": 9.9,
+  "Омлет сырный в пите": 10.9,
+  Сырники: 7.9,
+  "Омлет с томатами": 7.5,
+  "Омлет с беконом": 7.5,
+  "Омлет с ветчиной и грибами": 7.5,
+  "Омлет с пепперони": 7.5,
+  "Омлет сырный": 8.5,
+  "Омлет с ветчиной и грибами в пите": 9.9,
+  "Острый Додстер": 8.4,
+  "Паста Мясная": 15.9,
+  "Додстер Терияки": 8.4,
+  Додстер: 8.4,
+  "Додстер Чилл Грилл": 8.4,
+  "Ланчбокс Охотничий": 13.9,
+  "Персиковый молочный коктейль": 7.9,
+  "Молочный коктейль Фисташка": 7.9,
+  "Молочный коктейль с печеньем Орео": 7.9,
+  "Классический молочный коктейль": 7.9,
+  "Клубничный молочный коктейль": 7.9,
+  "Шоколадный молочный коктейль": 7.9,
+  "Кофе Американо": 5.4,
+  "Латте Темный лес": 5.5,
+  "Кофе Капучино": 5.3,
+  "Кофе Латте": 5.3,
+  "Кофе Карамельный капучино": 5.5,
+  "Кофе Кокосовый латте": 5.5,
+  "Кофе Ореховый латте": 5.5,
+  "Айс капучино": 7.9,
+  "Супермясной Додстер": 9.9,
+  "Додстер с ветчиной": 8.4,
 };

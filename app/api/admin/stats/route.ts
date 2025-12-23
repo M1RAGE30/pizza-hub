@@ -10,11 +10,18 @@ export async function GET(_req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const [totalUsers, totalProducts, totalOrders, orders, recentUsers] = await Promise.all([
+    const [
+      totalUsers,
+      totalProducts,
+      totalOrders,
+      successfulOrders,
+      recentUsers,
+    ] = await Promise.all([
       prisma.user.count(),
       prisma.product.count(),
       prisma.order.count(),
       prisma.order.findMany({
+        where: { status: "SUCCEEDED" },
         select: { totalAmount: true },
       }),
       prisma.user.findMany({
@@ -29,7 +36,10 @@ export async function GET(_req: NextRequest) {
       }),
     ]);
 
-    const totalRevenue = orders.reduce((sum, order) => sum + order.totalAmount, 0);
+    const totalRevenue = successfulOrders.reduce(
+      (sum, order) => sum + order.totalAmount,
+      0
+    );
 
     return NextResponse.json({
       totalUsers,

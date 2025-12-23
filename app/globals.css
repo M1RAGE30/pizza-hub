@@ -14,7 +14,6 @@ html {
 
 @layer base {
   :root {
-    --background: 60 4.8% 95.9%;
     --foreground: 20 14.3% 4.1%;
 
     --card: 0 0% 100%;
@@ -47,11 +46,6 @@ html {
 
 * {
   font-family: var(--font-nunito), sans-serif;
-}
-
-.scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: #dbdadd #fff;
 }
 
 .scrollbar::-webkit-scrollbar {
