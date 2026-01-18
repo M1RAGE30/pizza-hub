@@ -1,14 +1,11 @@
 import { NextResponse } from "next/server";
 
-export function successResponse<T = unknown>(data: T, status = 200) {
-  return NextResponse.json(data, { status });
-}
-
 export function errorResponse(message: string, status = 500, error?: unknown) {
   if (error) {
     console.error(`[API_ERROR] ${message}`, error);
   }
-  const errorString = error instanceof Error ? error.message : error?.toString();
+  const errorString =
+    error instanceof Error ? error.message : error?.toString();
   return NextResponse.json({ message, error: errorString }, { status });
 }
 

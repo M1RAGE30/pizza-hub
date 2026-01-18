@@ -11,5 +11,5 @@ export { findPizzas } from "./find-pizzas";
 export { findPizzaItem } from "./find-pizza-item";
 export { getIngredientPrice } from "./get-ingredient-price";
 export { createPayment } from "./create-payment";
-export { errorResponse, successResponse, handleApiError } from "./api-helpers";
+export { errorResponse, handleApiError } from "./api-helpers";
 export { formatPrice } from "./format-price";

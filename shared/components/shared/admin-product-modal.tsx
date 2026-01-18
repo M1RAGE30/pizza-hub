@@ -5,7 +5,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import { useAdminProductModal } from "../../hooks/use-admin-product-modal";
 import { Trash2 } from "lucide-react";
 
@@ -32,7 +38,11 @@ const getVariantsText = (count: number): string => {
   return `${count} вариантов`;
 };
 
-export const AdminProductModal: React.FC<Props> = ({ isOpen, onClose, product }) => {
+export const AdminProductModal: React.FC<Props> = ({
+  isOpen,
+  onClose,
+  product,
+}) => {
   const {
     formData,
     categories,
@@ -44,6 +54,9 @@ export const AdminProductModal: React.FC<Props> = ({ isOpen, onClose, product })
     addVariant,
     removeVariant,
     handleSubmit,
+    getAvailableSizes,
+    getAvailablePizzaTypes,
+    canAddVariant,
   } = useAdminProductModal(product, onClose);
 
   return (
@@ -73,13 +86,19 @@ export const AdminProductModal: React.FC<Props> = ({ isOpen, onClose, product })
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Категория *
               </label>
-              <Select value={formData.categoryId} onValueChange={handleCategoryChange}>
+              <Select
+                value={formData.categoryId}
+                onValueChange={handleCategoryChange}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Выберите категорию" />
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map((category: Category) => (
-                    <SelectItem key={category.id} value={category.id.toString()}>
+                    <SelectItem
+                      key={category.id}
+                      value={category.id.toString()}
+                    >
                       {category.name}
                     </SelectItem>
                   ))}
@@ -125,91 +144,117 @@ export const AdminProductModal: React.FC<Props> = ({ isOpen, onClose, product })
                   onClick={addVariant}
                   size="sm"
                   className="bg-primary hover:bg-primary/90"
+                  disabled={!canAddVariant()}
                 >
                   Добавить вариант
                 </Button>
               </div>
 
               <div className="space-y-4 max-h-60 overflow-y-auto">
-                {formData.variants.map((variant: ProductVariant, index: number) => (
-                  <div key={index} className="bg-white p-4 rounded-lg border">
-                    <div className="flex justify-between items-start mb-3">
-                      <h5 className="font-medium text-gray-900">
-                        Вариант {index + 1}
-                      </h5>
-                      {formData.variants.length > 1 && (
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => removeVariant(index)}
-                          className="text-red-600 hover:text-red-900 p-1"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      )}
+                {formData.variants.map(
+                  (variant: ProductVariant, index: number) => (
+                    <div key={index} className="bg-white p-4 rounded-lg border">
+                      <div className="flex justify-between items-start mb-3">
+                        <h5 className="font-medium text-gray-900">
+                          Вариант {index + 1}
+                        </h5>
+                        {formData.variants.length > 1 && (
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeVariant(index)}
+                            className="text-red-600 hover:text-red-900 p-1"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        )}
+                      </div>
+                      <div className="grid grid-cols-3 gap-3">
+                        <div>
+                          <label className="block text-xs font-medium text-gray-600 mb-1">
+                            Цена *
+                          </label>
+                          <Input
+                            type="number"
+                            value={variant.price}
+                            onChange={(e) =>
+                              handleVariantChange(
+                                index,
+                                "price",
+                                Number(e.target.value),
+                              )
+                            }
+                            placeholder="0"
+                            min="0"
+                            step="0.01"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-600 mb-1">
+                            {isPizzaCategory ? "Размер *" : "Размер"}
+                          </label>
+                          <Select
+                            value={
+                              variant.size?.toString() ||
+                              (isPizzaCategory ? "" : "0")
+                            }
+                            onValueChange={(value) =>
+                              handleVariantChange(
+                                index,
+                                "size",
+                                value === "0" ? null : Number(value),
+                              )
+                            }
+                            required={isPizzaCategory}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Размер" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {getAvailableSizes(index).map((size) => (
+                                <SelectItem key={size.value} value={size.value}>
+                                  {size.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-600 mb-1">
+                            {isPizzaCategory ? "Тип теста *" : "Тип теста"}
+                          </label>
+                          <Select
+                            value={
+                              variant.pizzaType?.toString() ||
+                              (isPizzaCategory ? "" : "0")
+                            }
+                            onValueChange={(value) =>
+                              handleVariantChange(
+                                index,
+                                "pizzaType",
+                                value === "0" ? null : Number(value),
+                              )
+                            }
+                            required={isPizzaCategory}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Тип" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {getAvailablePizzaTypes(index).map((type) => (
+                                <SelectItem key={type.value} value={type.value}>
+                                  {type.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
                     </div>
-                    <div className="grid grid-cols-3 gap-3">
-                      <div>
-                        <label className="block text-xs font-medium text-gray-600 mb-1">
-                          Цена *
-                        </label>
-                        <Input
-                          type="number"
-                          value={variant.price}
-                          onChange={(e) =>
-                            handleVariantChange(index, "price", Number(e.target.value))
-                          }
-                          placeholder="0"
-                          min="0"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-medium text-gray-600 mb-1">
-                          Размер
-                        </label>
-                        <Select
-                          value={variant.size?.toString() || "0"}
-                          onValueChange={(value) =>
-                            handleVariantChange(index, "size", value === "0" ? null : Number(value))
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Размер" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="0">Без размера</SelectItem>
-                            <SelectItem value="20">20 см</SelectItem>
-                            <SelectItem value="25">25 см</SelectItem>
-                            <SelectItem value="30">30 см</SelectItem>
-                            <SelectItem value="35">35 см</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div>
-                        <label className="block text-xs font-medium text-gray-600 mb-1">
-                          Тип теста
-                        </label>
-                        <Select
-                          value={variant.pizzaType?.toString() || "0"}
-                          onValueChange={(value) =>
-                            handleVariantChange(index, "pizzaType", value === "0" ? null : Number(value))
-                          }
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Тип" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="0">Без типа</SelectItem>
-                            <SelectItem value="1">Традиционное</SelectItem>
-                            <SelectItem value="2">Тонкое</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                  ),
+                )}
               </div>
             </div>
           ) : (
@@ -225,6 +270,7 @@ export const AdminProductModal: React.FC<Props> = ({ isOpen, onClose, product })
                 }
                 placeholder="0"
                 min="0"
+                step="0.01"
                 required
               />
             </div>
