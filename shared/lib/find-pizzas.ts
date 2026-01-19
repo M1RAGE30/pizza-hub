@@ -86,8 +86,8 @@ export const findPizzas = async (params: GetSearchParams) => {
         ...category,
         products: category.products.filter((product) => {
           const composition = (product.composition as number[] | null) || [];
-          return ingredientsIdArr.some((ingredientId) =>
-            composition.includes(ingredientId)
+          return ingredientsIdArr.every((ingredientId) =>
+            composition.includes(ingredientId),
           );
         }),
       }))

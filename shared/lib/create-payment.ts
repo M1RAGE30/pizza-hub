@@ -10,8 +10,8 @@ interface Props {
 
 export async function createPayment(details: Props) {
   const rubAmount = convertBYNToRUB(details.amount);
-  const rubAmountRounded = Math.round(rubAmount * 100) / 100; // Округляем до копеек
-  
+  const rubAmountRounded = Math.round(rubAmount * 100) / 100;
+
   const { data } = await axios.post<PaymentData>(
     "https://api.yookassa.ru/v3/payments",
     {
@@ -38,7 +38,7 @@ export async function createPayment(details: Props) {
         "Content-Type": "application/json",
         "Idempotence-Key": Math.random().toString(36).substring(7),
       },
-    }
+    },
   );
 
   return data;
